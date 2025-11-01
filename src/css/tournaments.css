@@ -1,0 +1,135 @@
+/* src/css/tournaments.css */
+
+.tournaments-page-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tournaments-page-container h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.tournaments-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.tournament-card {
+  background-color: #fff;
+  border: 1px solid var(--color-neutral);
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tournament-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tournament-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.tournament-card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.tournament-card strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-left: 0.5rem;
+}
+
+.status-planned {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.status-active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-completed {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.status-cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.details-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.details-link:hover {
+  background-color: #b0271e;
+  transform: scale(1.05);
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.1rem;
+}
+
+.loading-message {
+  color: #666;
+}
+
+.error-message {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tournaments-page-container {
+    padding: 1rem;
+  }
+
+  .tournaments-page-container h1 {
+    font-size: 2rem;
+  }
+
+  .tournaments-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
