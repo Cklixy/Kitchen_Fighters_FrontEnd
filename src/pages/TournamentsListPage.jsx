@@ -55,33 +55,38 @@ const TournamentsPage = () => {
 
     return (
       <div className="tournaments-list">
-        {tournaments.map((tournament) => {
+        {tournaments
+          // --- ¡¡ESTA ES LA LÍNEA CORREGIDA!! ---
+          // Filtramos cualquier torneo que no tenga un ID antes de intentar mostrarlo
+          .filter(tournament => tournament && tournament._id) 
+          // --- FIN DE LA CORRECCIÓN ---
+          .map((tournament) => {
           
-          // Mantenemos el arreglo para la fecha
-          const displayDate = tournament.inicio || tournament.startDate;
+            // Mantenemos el arreglo para la fecha
+            const displayDate = tournament.inicio || tournament.startDate;
 
-          return (
-            <div key={tournament._id} className="tournament-card">
-              <h2>{tournament.name}</h2>
-              
-              {/* --- SECCIÓN DE ESTADO ELIMINADA --- */}
-              
-              <p>
-                <strong>Inicio:</strong> 
-                {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
-              </p>
-              
-              <p>
-                <strong>Participantes:</strong> 
-                {tournament.participants?.length || 0} / 16
-              </p>
+            return (
+              <div key={tournament._id} className="tournament-card">
+                <h2>{tournament.name}</h2>
+                
+                {/* --- SECCIÓN DE ESTADO ELIMINADA --- */}
+                
+                <p>
+                  <strong>Inicio:</strong> 
+                  {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
+                </p>
+                
+                <p>
+                  <strong>Participantes:</strong> 
+                  {tournament.participants?.length || 0} / 16
+                </p>
 
-              <Link to={`/tournaments/${tournament._id}`} className="details-link">
-                Ver Detalles
-              </Link>
-            </div>
-          );
-        })}
+                <Link to={`/tournaments/${tournament._id}`} className="details-link">
+                  Ver Detalles
+                </Link>
+              </div>
+            );
+          })}
       </div>
     );
   };

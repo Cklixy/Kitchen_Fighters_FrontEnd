@@ -9,9 +9,13 @@ import RegisterChefPage from './pages/RegisterChefPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ProfilePage from './pages/ProfilePage';
-
-// 1. IMPORTAMOS LA NUEVA PÁGINA
 import ChefDetailPage from './pages/ChefDetailPage';
+
+// --- ¡¡CÓDIGO AÑADIDO!! ---
+// 1. IMPORTAMOS LOS NUEVOS COMPONENTES DE ADMIN
+import AdminRoute from './components/AdminRoute';
+import AdminPage from './pages/AdminPage';
+// --- FIN DEL CÓDIGO AÑADIDO ---
 
 function App() {
   return (
@@ -26,13 +30,18 @@ function App() {
             <Route path="/tournaments/:id" element={<TournamentDetailPage />} />
             
             <Route path="/chefs" element={<ChefsPage />} />
-            {/* 2. AÑADIMOS LA NUEVA RUTA PÚBLICA DE DETALLE */}
             <Route path="/chefs/:id" element={<ChefDetailPage />} />
             
             <Route path="/chefs/register" element={<RegisterChefPage />} />
             <Route path="/login" element={<LoginPage />} />
             
-            {/* --- Rutas Protegidas --- */}
+            {/* --- Rutas Protegidas (Solo Admin) --- */}
+            {/* IMPORTANTE: Debe ir antes de otras rutas protegidas para evitar conflictos */}
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<AdminPage />} />
+            </Route>
+
+            {/* --- Rutas Protegidas (Usuarios logueados) --- */}
             <Route element={<ProtectedRoute />}>
               <Route path="/profile" element={<ProfilePage />} />
             </Route>

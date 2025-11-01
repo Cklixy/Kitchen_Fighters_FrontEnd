@@ -46,8 +46,9 @@ const LoginPage = () => {
       // 3. Limpiamos formulario y redirigimos al Home
       setEmail('');
       setPassword('');
+      // Disparamos el evento para actualizar el Navbar
+      window.dispatchEvent(new Event('local-storage-changed'));
       navigate('/'); //
-      window.location.reload(); // Recargamos para que el Navbar se actualice
 
     } catch (err) {
       if (err instanceof Error) {
