@@ -1,86 +1,73 @@
-.tournaments-page-container {
+.chefs-page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem;
 }
 
-.tournaments-page-container h1 {
+/* --- Estilo de Título (Simplificado) --- */
+.page-header h1 {
   color: var(--color-primary);
   margin-bottom: 2rem;
   border-bottom: 2px solid var(--color-primary-light);
   padding-bottom: 0.5rem;
 }
 
-/* Grid para la lista de torneos */
-.tournaments-list {
+/* --- Grid para la lista de chefs --- */
+.chefs-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* Estilo para cada tarjeta de torneo */
-.tournament-card {
+/* --- Tarjeta de Chef --- */
+.chef-card {
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  align-items: center;
+  text-align: center;
 }
 
-.tournament-card:hover {
+.chef-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
-.tournament-card h2 {
-  margin-top: 0;
+.chef-card-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--color-primary-light);
   margin-bottom: 1rem;
+  background-color: #f0f0f0;
+}
+
+.chef-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
   color: var(--color-primary);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
-.tournament-card p {
-  margin: 0.5rem 0;
+.chef-card p {
+  margin: 0.25rem 0;
   color: #555;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
-.tournament-card p strong {
+.chef-card p strong {
   color: #333;
-  margin-right: 0.5rem;
 }
 
-/* --- ESTILOS DE ESTADO (LO QUE FALTABA) --- */
-.status {
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-weight: bold;
-  text-transform: capitalize;
-  font-size: 0.9rem;
-  color: white;
-  display: inline-block;
-  margin-left: 0.25rem;
-}
-
-.status-Pendiente {
-  background-color: #f0ad4e; /* Naranja */
-}
-
-.status-En.Curso,
-.status-En {
-  background-color: #5bc0de; /* Azul */
-}
-
-.status-Finalizado {
-  background-color: #5cb85c; /* Verde */
-}
-/* --- FIN DE ESTILOS DE ESTADO --- */
-
-
+/* --- Botón de detalles --- */
 .details-link {
-  margin-top: auto; /* Empuja el botón al final de la tarjeta */
+  margin-top: auto; 
   padding: 0.75rem 1rem;
   background-color: var(--color-primary);
   color: white;
@@ -89,6 +76,8 @@
   border-radius: 4px;
   font-weight: bold;
   transition: background-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .details-link:hover {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/tournament-detail.css'; 
-// También importamos el CSS de la lista para el botón, por si acaso
-import '../css/tournaments.css';
 
 const API_URL = 'http://localhost:5000';
 
@@ -49,7 +47,6 @@ const TournamentDetailPage = () => {
     // Carga los datos del torneo
     fetchTournament();
 
-    // --- ¡ESTA ES LA LÓGICA CLAVE QUE FALTABA! ---
     // Revisa si hay un chef logueado en localStorage
     const storedChef = localStorage.getItem('chef');
     if (storedChef && storedChef !== 'undefined') {
@@ -76,7 +73,7 @@ const TournamentDetailPage = () => {
     }
 
     try {
-      // 5. Llamamos al endpoint protegido
+      // 5. Llamamos al endpoint protegido. No necesitamos enviar body.
       const response = await fetch(`${API_URL}/api/tournaments/${id}/register`, {
         method: 'POST',
         headers: {
@@ -137,7 +134,6 @@ const TournamentDetailPage = () => {
       <header className="detail-header">
         <h1>{tournament.name}</h1>
         <div className="detail-info">
-          {/* Quitamos el 'Estado' de aquí para que no estorbe */}
           <p>
             <strong>Inicio:</strong>
             {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
@@ -149,8 +145,7 @@ const TournamentDetailPage = () => {
         </div>
       </header>
 
-      {/* --- ¡AQUÍ APARECE EL BOTÓN! ---
-          Esta caja solo se renderiza si 'loggedInChef' NO es nulo */}
+      {/* --- (NUEVO) BLOQUE DE INSCRIPCIÓN --- */}
       {loggedInChef && (
         <div className="registration-box">
           {(() => {
@@ -182,8 +177,6 @@ const TournamentDetailPage = () => {
           })()}
         </div>
       )}
-      {/* --- FIN DEL BLOQUE DE INSCRIPCIÓN --- */}
-
 
       {/* --- COLUMNAS (Sin cambios) --- */}
       <div className="detail-columns">
