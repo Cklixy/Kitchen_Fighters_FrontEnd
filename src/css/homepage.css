@@ -1,0 +1,71 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 0 2rem;
+    box-sizing: border-box;
+  }
+  
+  .home-header h1 {
+    font-size: 3.5rem;
+    color: var(--color-text);
+    margin-bottom: 1rem;
+  }
+  
+  .home-description {
+    font-size: 1.25rem;
+    color: #555;
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+  
+  .home-cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  /* Estilos de botones (pueden ir en index.css si son globales) */
+  .btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+  }
+  
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+  
+  .btn-primary:hover {
+    background-color: #b0271e; /* Un tono más oscuro del rojo */
+    border-color: #b0271e;
+  }
+  
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .home-footer {
+    position: absolute;
+    bottom: 20px;
+    font-size: 0.9rem;
+    color: #999;
+  }
