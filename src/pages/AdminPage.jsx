@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../css/forms.css'; // ¡¡AÑADIDO!! Para estilizar el nuevo formulario
 
 // --- (Opcional) CSS para la página de Admin ---
 const adminStyles = {
@@ -57,6 +58,17 @@ const AdminPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  // --- (¡¡AÑADIDO!!) Estados para el formulario de creación de torneos ---
+  const [tournamentName, setTournamentName] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [maxParticipants, setMaxParticipants] = useState('');
+  
+  const [createError, setCreateError] = useState(null);
+  const [createSuccess, setCreateSuccess] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  // --- Fin de estados añadidos ---
 
   console.log('AdminPage - Componente montado');
 
@@ -145,6 +157,66 @@ const AdminPage = () => {
     fetchData();
   }, [navigate]);
 
+  // --- (¡¡AÑADIDO!!) Función para crear torneo ---
+  const handleCreateTournament = async (e) => {
+    e.preventDefault();
+    setCreateError(null);
+    setCreateSuccess(null);
+    setIsSubmitting(true);
+
+    try {
+      const token = getToken();
+      const participantsNum = parseInt(maxParticipants, 10);
+
+      if (isNaN(participantsNum) || participantsNum <= 1) { // Un torneo necesita al menos 2 participantes
+        throw new Error('El número de participantes debe ser un número positivo mayor a 1.');
+      }
+
+      const tournamentData = {
+        name: tournamentName,
+        startDate,
+        description,
+        maxParticipants: participantsNum
+      };
+
+      // Asumimos que la creación de torneos por un admin también va a un endpoint de admin
+      // Si el endpoint es /api/tournaments (público), cámbialo aquí.
+      const res = await fetch('http://localhost:5000/api/admin/tournaments', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tournamentData)
+      });
+
+      if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.message || 'No se pudo crear el torneo');
+      }
+
+      const newTournament = await res.json();
+
+      // Actualizar el estado local para que aparezca en la lista
+      setTournaments(prev => [...prev, newTournament]);
+      
+      setCreateSuccess(`¡Torneo "${newTournament.name}" creado!`);
+      
+      // Limpiar formulario
+      setTournamentName('');
+      setStartDate('');
+      setDescription('');
+      setMaxParticipants('');
+
+    } catch (err) {
+      setCreateError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  // --- Fin de la función añadida ---
+
+
   // --- Funciones de Gestión ---
 
   const handleDeleteTournament = async (id) => {
@@ -166,7 +238,7 @@ const AdminPage = () => {
       // Actualizar el estado local
       setTournaments(prev => prev.filter(t => t._id !== id));
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // Puedes usar setCreateError si prefieres mostrar el error cerca del formulario
     }
   };
 
@@ -261,16 +333,90 @@ const AdminPage = () => {
     <>
       <h1 style={{ textAlign: 'center', color: '#333', marginBottom: '2rem' }}>Panel de Administrador</h1>
       <div style={adminStyles.container}>
-        {/* Sección de Gestión de Torneos */}
+        
+        {/* --- (MODIFICADO) Sección de Gestión de Torneos --- */}
         <section style={adminStyles.section}>
-          <h2>Gestionar Torneos ({tournaments.length})</h2>
+          <h2>Gestionar Torneos</h2>
+
+          {/* --- INICIO: FORMULARIO DE CREAR TORNEO AÑADIDO --- */}
+          <form onSubmit={handleCreateTournament} style={{ marginBottom: '2rem', paddingBottom: '1.5rem', borderBottom: '1px solid #eee' }}>
+            <h3 style={{ marginTop: 0 }}>Crear Nuevo Torneo</h3>
+            
+            <div className="form-group">
+              <label htmlFor="tournamentName">Nombre del Torneo</label>
+              <input
+                type="text"
+                id="tournamentName"
+                value={tournamentName}
+                onChange={(e) => setTournamentName(e.target.value)}
+                required
+                placeholder="Ej: Batalla Culinaria de Verano"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="startDate">Fecha de Inicio</label>
+              <input
+                type="date"
+                id="startDate"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">Descripción</label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows="3"
+                placeholder="Breve descripción del torneo"
+                // Añadimos estilo inline para que coincida con los inputs de forms.css
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  fontSize: '1rem',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  boxSizing: 'border-box',
+                  fontFamily: 'inherit'
+                }}
+              ></textarea>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="maxParticipants">Participantes Máximos</label>
+              <input
+                type="number"
+                id="maxParticipants"
+                value={maxParticipants}
+                onChange={(e) => setMaxParticipants(e.target.value)}
+                required
+                min="2"
+                placeholder="Ej: 16"
+              />
+            </div>
+            
+            <button type="submit" className="btn-submit" disabled={isSubmitting} style={{width: '100%'}}>
+              {isSubmitting ? 'Creando...' : 'Crear Torneo'}
+            </button>
+
+            {createError && <p className="form-message error-message" style={{marginTop: '1rem'}}>{createError}</p>}
+            {createSuccess && <p className="form-message success-message" style={{marginTop: '1rem'}}>{createSuccess}</p>}
+          </form>
+          {/* --- FIN: FORMULARIO DE CREAR TORNEO --- */}
+
+
+          <h3>Torneos Existentes ({tournaments.length})</h3>
           {tournaments.length === 0 ? (
             <p style={{ color: '#666', fontStyle: 'italic' }}>No hay torneos registrados.</p>
           ) : (
             <ul style={adminStyles.list}>
               {tournaments.map(t => (
                 <li key={t._id} style={adminStyles.listItem}>
-                  <span>{t.name}</span>
+                  <span>{t.name} ({new Date(t.startDate).toLocaleDateString()})</span>
                   <div>
                     <button 
                       style={{...adminStyles.button, ...adminStyles.deleteButton}}
@@ -284,6 +430,8 @@ const AdminPage = () => {
             </ul>
           )}
         </section>
+        {/* --- Fin de la sección modificada --- */}
+
 
         {/* Sección de Gestión de Usuarios */}
         <section style={adminStyles.section}>

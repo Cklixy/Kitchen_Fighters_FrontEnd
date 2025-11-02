@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import '../css/tournament-detail.css'; 
-// También importamos el CSS de la lista para el botón, por si acaso
-import '../css/tournaments.css';
+import '../css/tournament-detail.css';
+import '../css/tournaments.css'; // Para el botón
 
 const API_URL = 'http://localhost:5000';
 
@@ -49,7 +48,6 @@ const TournamentDetailPage = () => {
     // Carga los datos del torneo
     fetchTournament();
 
-    // --- ¡ESTA ES LA LÓGICA CLAVE QUE FALTABA! ---
     // Revisa si hay un chef logueado en localStorage
     const storedChef = localStorage.getItem('chef');
     if (storedChef && storedChef !== 'undefined') {
@@ -130,6 +128,11 @@ const TournamentDetailPage = () => {
     p => p._id === loggedInChef._id
   );
 
+  // 9. Lógica de participantes máximos
+  const maxP = tournament.maxParticipants || 16; // Default a 16 si no está definido
+  const participantsCount = tournament.participants?.length || 0;
+  const isFull = participantsCount >= maxP;
+
   return (
     <div className="detail-page-container">
       
@@ -137,26 +140,42 @@ const TournamentDetailPage = () => {
       <header className="detail-header">
         <h1>{tournament.name}</h1>
         <div className="detail-info">
-          {/* Quitamos el 'Estado' de aquí para que no estorbe */}
           <p>
             <strong>Inicio:</strong>
             {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
           </p>
           <p>
             <strong>Inscritos:</strong>
-            {tournament.participants?.length || 0} / 16
+            {/* --- ¡¡MODIFICADO!! Usa maxParticipants --- */}
+            {participantsCount} / {maxP}
           </p>
         </div>
       </header>
+      
+      {/* --- ¡¡BLOQUE DE DESCRIPCIÓN AÑADIDO!! --- */}
+      {/* Mostramos la descripción si existe y no es el default */}
+      {tournament.description && tournament.description !== 'No hay descripción para este torneo.' && (
+        <div className="registration-box description-box" style={{textAlign: 'left', background: '#fdfdfd'}}>
+          <h3 style={{marginTop: 0, marginBottom: '0.5rem'}}>Descripción del Torneo</h3>
+          {/* Añadimos whiteSpace: 'pre-wrap' para respetar saltos de línea */}
+          <p style={{marginTop: 0, whiteSpace: 'pre-wrap'}}>
+            {tournament.description}
+          </p>
+        </div>
+      )}
+      {/* --- FIN DEL BLOQUE AÑADIDO --- */}
 
-      {/* --- ¡AQUÍ APARECE EL BOTÓN! ---
-          Esta caja solo se renderiza si 'loggedInChef' NO es nulo */}
+      {/* --- BLOQUE DE INSCRIPCIÓN --- */}
       {loggedInChef && (
         <div className="registration-box">
           {(() => {
             // Caso 1: El torneo ya no está 'Pendiente'
             if (tournament.estado !== 'Pendiente') {
               return <p className="success-message">Las inscripciones para este torneo están cerradas.</p>;
+            }
+            // Caso 1.5: El torneo está lleno (y no estás inscrito)
+            if (isFull && !isAlreadyRegistered) {
+              return <p className="success-message">Este torneo ya ha alcanzado el máximo de {maxP} participantes.</p>;
             }
             // Caso 2: Ya está inscrito
             if (isAlreadyRegistered) {
@@ -188,7 +207,7 @@ const TournamentDetailPage = () => {
       {/* --- COLUMNAS (Sin cambios) --- */}
       <div className="detail-columns">
         <div className="column-card">
-          <h2>Participantes ({tournament.participants?.length || 0})</h2>
+          <h2>Participantes ({participantsCount})</h2>
           {tournament.participants && tournament.participants.length > 0 ? (
             <ul className="participant-list">
               {tournament.participants.map((chef) => (
