@@ -3,11 +3,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/tournament-detail.css'; 
+import ConfirmationModal from '../components/ConfirmationModal'; 
 
 const API_URL = 'http://localhost:5000';
 
 const getStatusClass = (status) => {
-  if (!status) return 'status-Pendiente'; // <-- Default a Pendiente
+  if (!status) return 'status-Pendiente';
   return `status-${status.replace(/\s+/g, '-')}`;
 };
 
@@ -19,9 +20,12 @@ const TournamentDetailPage = () => {
   const [error, setError] = useState(null);
 
   const [loggedInChef, setLoggedInChef] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [registerError, setRegisterError] = useState(null);
-  const [registerSuccess, setRegisterSuccess] = useState(null);
+
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [isUnregistering, setIsUnregistering] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState({ error: null, success: null });
+
+  const [showUnregisterConfirmModal, setShowUnregisterConfirmModal] = useState(false);
 
   const fetchTournament = useCallback(async () => {
     try {
@@ -61,14 +65,13 @@ const TournamentDetailPage = () => {
   }, [fetchTournament]);
 
   const handleRegister = async () => {
-    setIsSubmitting(true);
-    setRegisterError(null);
-    setRegisterSuccess(null);
+    setIsRegistering(true);
+    setSubmissionStatus({ error: null, success: null });
 
     const token = localStorage.getItem('token');
     if (!token) {
-      setRegisterError('Debes iniciar sesión para inscribirte.');
-      setIsSubmitting(false);
+      setSubmissionStatus({ error: 'Debes iniciar sesión para inscribirte.', success: null });
+      setIsRegistering(false);
       return;
     }
 
@@ -83,20 +86,86 @@ const TournamentDetailPage = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Error al inscribirse');
+        // --- INICIO DE CAMBIO ---
+        // Creamos un error personalizado que incluya el status
+        const error = new Error(data.message || 'Error al inscribirse');
+        error.status = response.status; 
+        throw error;
+        // --- FIN DE CAMBIO ---
       }
 
-      setRegisterSuccess('¡Inscrito exitosamente!');
+      setSubmissionStatus({ error: null, success: '¡Inscrito exitosamente!' });
       setTournament(data); 
 
     } catch (err) {
+      // --- INICIO DE CAMBIO ---
       if (err instanceof Error) {
-        setRegisterError(err.message);
+        // Si el status es 401 (Unauthorized), mostramos el mensaje amigable
+        if (err.status === 401) {
+          setSubmissionStatus({ error: 'Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.', success: null });
+        } else {
+          // Para cualquier otro error, mostramos el mensaje que viene del backend
+          setSubmissionStatus({ error: err.message, success: null });
+        }
       } else {
-        setRegisterError('Ocurrió un error desconocido.');
+        setSubmissionStatus({ error: 'Ocurrió un error desconocido.', success: null });
       }
+      // --- FIN DE CAMBIO ---
     } finally {
-      setIsSubmitting(false);
+      setIsRegistering(false);
+    }
+  };
+  
+  const performUnregister = async () => { 
+    setIsUnregistering(true);
+    setShowUnregisterConfirmModal(false); 
+    setSubmissionStatus({ error: null, success: null });
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setSubmissionStatus({ error: 'Debes iniciar sesión.', success: null });
+      setIsUnregistering(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/tournaments/${id}/unregister`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // --- INICIO DE CAMBIO ---
+        // Creamos un error personalizado que incluya el status
+        const error = new Error(data.message || 'Error al anular la inscripción');
+        error.status = response.status;
+        throw error;
+        // --- FIN DE CAMBIO ---
+      }
+
+      setSubmissionStatus({ error: null, success: 'Inscripción anulada exitosamente.' });
+      setTournament(data); 
+
+    } catch (err) {
+      // --- INICIO DE CAMBIO ---
+      if (err instanceof Error) {
+        // Si el status es 401 (Unauthorized), mostramos el mensaje amigable
+        if (err.status === 401) {
+          setSubmissionStatus({ error: 'Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.', success: null });
+        } else {
+          // Para cualquier otro error, mostramos el mensaje que viene del backend
+          setSubmissionStatus({ error: err.message, success: null });
+        }
+      } else {
+        setSubmissionStatus({ error: 'Ocurrió un error desconocido.', success: null });
+      }
+      // --- FIN DE CAMBIO ---
+    } finally {
+      setIsUnregistering(false);
     }
   };
 
@@ -127,7 +196,6 @@ const TournamentDetailPage = () => {
   const participantsCount = tournament.participants?.length || 0;
   const isFull = participantsCount >= maxP;
 
-  // --- ¡¡LÓGICA DE ESTADO MODIFICADA!! ---
   const imageUrl = tournament.imageUrl 
     ? `${API_URL}${tournament.imageUrl}` 
     : null;
@@ -135,12 +203,10 @@ const TournamentDetailPage = () => {
   const estado = tournament.estado || 'Pendiente';
   const estadoClass = getStatusClass(estado);
   const estadoTexto = estado === 'Inscripción' ? 'Inscripción Abierta' : estado;
-  // --- FIN DE LÓGICA ---
 
   return (
     <div className="detail-page-container">
       
-      {/* --- CABECERA MODIFICADA --- */}
       <header className="detail-header">
         
         {imageUrl && (
@@ -175,42 +241,57 @@ const TournamentDetailPage = () => {
         </div>
       )}
 
-      {/* --- BLOQUE DE INSCRIPCIÓN (LÓGICA MODIFICADA) --- */}
       {loggedInChef && (
         <div className="registration-box">
           {(() => {
+            if (submissionStatus.success) {
+              return <p className="success-message">{submissionStatus.success}</p>;
+            }
+
+            if (isAlreadyRegistered) {
+              if (tournament.estado !== 'Inscripción') {
+                return <p className="success-message">¡Ya estás inscrito en este torneo!</p>;
+              }
+              return (
+                <>
+                  <p style={{marginTop: 0, marginBottom: '1rem'}}>Ya estás inscrito. ¿Deseas anular tu inscripción?</p>
+                  <button 
+                    onClick={() => setShowUnregisterConfirmModal(true)} 
+                    disabled={isUnregistering} 
+                    className="btn-register btn-danger" 
+                  >
+                    {isUnregistering ? 'Anulando...' : 'Anular Inscripción'}
+                  </button>
+                </>
+              );
+            }
+            
             if (tournament.estado !== 'Inscripción') {
               if (tournament.estado === 'Pendiente') {
-                 return <p className="success-message">Las inscripciones para este torneo aún no han abierto.</p>;
+                 return <p className="info-message">Las inscripciones para este torneo aún no han abierto.</p>;
               }
-              return <p className="success-message">Las inscripciones para este torneo están cerradas.</p>;
+              return <p className="info-message">Las inscripciones para este torneo están cerradas.</p>;
             }
-            if (isFull && !isAlreadyRegistered) {
-              return <p className="success-message">Este torneo ya ha alcanzado el máximo de {maxP} participantes.</p>;
+
+            if (isFull) {
+              return <p className="info-message">Este torneo ya ha alcanzado el máximo de {maxP} participantes.</p>;
             }
-            if (isAlreadyRegistered) {
-              return <p className="success-message">¡Ya estás inscrito en este torneo!</p>;
-            }
-            if (registerSuccess) {
-              return <p className="success-message">{registerSuccess}</p>;
-            }
+
             return (
-              <>
-                <button 
-                  onClick={handleRegister} 
-                  disabled={isSubmitting} 
-                  className="btn-register"
-                >
-                  {isSubmitting ? 'Inscribiendo...' : '¡Inscribirme a este torneo!'}
-                </button>
-                {registerError && <p className="error-message" style={{marginTop: '1rem'}}>{registerError}</p>}
-              </>
+              <button 
+                onClick={handleRegister} 
+                disabled={isRegistering} 
+                className="btn-register"
+              >
+                {isRegistering ? 'Inscribiendo...' : '¡Inscribirme a este torneo!'}
+              </button>
             );
           })()}
+          
+          {submissionStatus.error && <p className="error-message" style={{marginTop: '1rem'}}>{submissionStatus.error}</p>}
         </div>
       )}
 
-      {/* --- COLUMNAS (SIN CAMBIOS) --- */}
       <div className="detail-columns">
         <div className="column-card">
           <h2>Participantes ({participantsCount})</h2>
@@ -258,6 +339,14 @@ const TournamentDetailPage = () => {
           )}
         </div>
       </div>
+
+      <ConfirmationModal
+        isOpen={showUnregisterConfirmModal}
+        title="Anular Inscripción"
+        message="¿Estás seguro de que deseas anular tu inscripción a este torneo?"
+        onConfirm={performUnregister} 
+        onCancel={() => setShowUnregisterConfirmModal(false)} 
+      />
     </div>
   );
 };

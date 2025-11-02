@@ -98,3 +98,21 @@
   border: 1px solid rgba(255, 80, 80, 0.3);
   border-radius: 8px;
 }
+
+.btn-register.btn-danger {
+  background-color: #dc3545; /* Un color rojo */
+  border-color: #dc3545;
+}
+
+.btn-register.btn-danger:hover {
+  background-color: #c82333; /* Un rojo más oscuro al pasar el mouse */
+  border-color: #bd2130;
+}
+
+.info-message {
+  padding: 1rem;
+  background-color: #e6f7ff;
+  border: 1px solid #91d5ff;
+  border-radius: 8px;
+  color: #0056b3;
+}
