@@ -1,9 +1,6 @@
-/* src/pages/LoginPage.jsx */
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-// REQUISITO: Importar los nuevos estilos de formulario
-import '../css/forms.css'; 
+import '../css/forms.css';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -42,25 +39,19 @@ const LoginPage = () => {
       setEmail('');
       setPassword('');
       window.dispatchEvent(new Event('local-storage-changed'));
-      navigate('/'); 
-
+      navigate('/');
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Ocurrió un error desconocido.');
-      }
+      setError(err instanceof Error ? err.message : 'Ocurrió un error desconocido.');
       setIsSubmitting(false);
     }
   };
 
   return (
-    // REQUISITO: Usar el wrapper del formulario
-    <div className="form-container-wrapper"> 
+    // Cambié el wrapper al nombre correcto
+    <div className="form-page-container">  
       <div className="form-container">
         <h2>Iniciar Sesión</h2>
-        <form onSubmit={handleSubmit} style={{display: 'contents'}}>
-          
+        <form onSubmit={handleSubmit} style={{ display: 'contents' }}>
           <div className="form-group">
             <label htmlFor="email">Correo Electrónico</label>
             <input
@@ -92,14 +83,10 @@ const LoginPage = () => {
           {error && <p className="form-message error-message">{error}</p>}
         </form>
 
-        {/* REQUISITO: Enlaces de formulario con el nuevo estilo */}
-        <div className="form-links">
-          <Link to="/forgot-password">
-            ¿Olvidaste tu contraseña?
-          </Link>
-          <Link to="/chefs/register">
-            ¿No tienes cuenta? Regístrate aquí
-          </Link>
+        <div className="form-link">
+          <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
+          <br />
+          <Link to="/chefs/register">¿No tienes cuenta? Regístrate aquí</Link>
         </div>
       </div>
     </div>
