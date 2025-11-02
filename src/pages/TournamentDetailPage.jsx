@@ -1,11 +1,15 @@
-/* src/pages/TournamentDetailPage.tsx */
+/* src/pages/TournamentDetailPage.jsx */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import '../css/tournament-detail.css'; // CSS principal
-// import '../css/tournaments.css'; // ELIMINADO
+import '../css/tournament-detail.css'; 
 
 const API_URL = 'http://localhost:5000';
+
+const getStatusClass = (status) => {
+  if (!status) return 'status-Pendiente'; // <-- Default a Pendiente
+  return `status-${status.replace(/\s+/g, '-')}`;
+};
 
 const TournamentDetailPage = () => {
   const { id } = useParams();
@@ -123,25 +127,45 @@ const TournamentDetailPage = () => {
   const participantsCount = tournament.participants?.length || 0;
   const isFull = participantsCount >= maxP;
 
+  // --- ¡¡LÓGICA DE ESTADO MODIFICADA!! ---
+  const imageUrl = tournament.imageUrl 
+    ? `${API_URL}${tournament.imageUrl}` 
+    : null;
+  
+  const estado = tournament.estado || 'Pendiente';
+  const estadoClass = getStatusClass(estado);
+  const estadoTexto = estado === 'Inscripción' ? 'Inscripción Abierta' : estado;
+  // --- FIN DE LÓGICA ---
+
   return (
     <div className="detail-page-container">
       
-      {/* --- CABECERA --- */}
+      {/* --- CABECERA MODIFICADA --- */}
       <header className="detail-header">
-        <h1>{tournament.name}</h1>
-        <div className="detail-info">
-          <p>
-            <strong>Inicio:</strong>
-            {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
-          </p>
-          <p>
-            <strong>Inscritos:</strong>
-            {participantsCount} / {maxP}
-          </p>
+        
+        {imageUrl && (
+          <img src={imageUrl} alt={tournament.name} className="detail-header-image" />
+        )}
+
+        <div className="detail-header-content">
+          <h1>{tournament.name}</h1>
+          <div className="detail-info">
+            <p>
+              <strong>Inicio:</strong>
+              {displayDate ? new Date(displayDate).toLocaleDateString() : 'Por definir'}
+            </p>
+            <p>
+              <strong>Inscritos:</strong>
+              {participantsCount} / {maxP}
+            </p>
+            <p>
+              <strong>Estado:</strong>
+              <span className={`status ${estadoClass}`}>{estadoTexto}</span>
+            </p>
+          </div>
         </div>
       </header>
       
-      {/* --- BLOQUE DE DESCRIPCIÓN --- */}
       {tournament.description && tournament.description !== 'No hay descripción para este torneo.' && (
         <div className="registration-box description-box" style={{textAlign: 'left'}}>
           <h3 style={{marginTop: 0, marginBottom: '0.5rem'}}>Descripción del Torneo</h3>
@@ -151,11 +175,14 @@ const TournamentDetailPage = () => {
         </div>
       )}
 
-      {/* --- BLOQUE DE INSCRIPCIÓN --- */}
+      {/* --- BLOQUE DE INSCRIPCIÓN (LÓGICA MODIFICADA) --- */}
       {loggedInChef && (
         <div className="registration-box">
           {(() => {
-            if (tournament.estado !== 'Pendiente') {
+            if (tournament.estado !== 'Inscripción') {
+              if (tournament.estado === 'Pendiente') {
+                 return <p className="success-message">Las inscripciones para este torneo aún no han abierto.</p>;
+              }
               return <p className="success-message">Las inscripciones para este torneo están cerradas.</p>;
             }
             if (isFull && !isAlreadyRegistered) {
@@ -183,7 +210,7 @@ const TournamentDetailPage = () => {
         </div>
       )}
 
-      {/* --- COLUMNAS --- */}
+      {/* --- COLUMNAS (SIN CAMBIOS) --- */}
       <div className="detail-columns">
         <div className="column-card">
           <h2>Participantes ({participantsCount})</h2>

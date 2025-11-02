@@ -1,169 +1,198 @@
+/* src/components/CreateChefForm.jsx */
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/forms.css'; //
+import { specialtyCategories } from '../data/specialties.js'; // <-- ¡¡AÑADIDO!!
 
-/**
- * Componente de formulario para crear un nuevo Chef.
- */
+const API_URL = 'http://localhost:5000';
+
 const CreateChefForm = () => {
-  const navigate = useNavigate();
-
-  // 1. Añadimos estado para email y password
   const [name, setName] = useState('');
-  const [specialty, setSpecialty] = useState('');
-  const [experienceYears, setExperienceYears] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
+  // --- ¡¡NUEVA LÓGICA DE ESPECIALIDAD!! ---
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [availableSpecialties, setAvailableSpecialties] = useState([]);
+  const [specialty, setSpecialty] = useState(''); 
+  // --- FIN DE NUEVA LÓGICA ---
+
+  const [experienceYears, setExperienceYears] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  // --- ¡¡NUEVA FUNCIÓN!! ---
+  // Actualiza el 2do dropdown cuando la categoría cambia
+  const handleCategoryChange = (e) => {
+    const categoryName = e.target.value;
+    setSelectedCategory(categoryName);
+    setSpecialty(''); // Resetea la especialidad
+    
+    if (categoryName) {
+      const category = specialtyCategories.find(c => c.name === categoryName);
+      setAvailableSpecialties(category.specialties);
+    } else {
+      setAvailableSpecialties([]);
+    }
+  };
+  // --- FIN DE NUEVA FUNCIÓN ---
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setError(null);
     setSuccess(null);
 
-    const experienceNum = parseInt(experienceYears, 10);
-    if (isNaN(experienceNum) || experienceNum < 0) {
-      setError('Los años de experiencia deben ser un número positivo.');
-      setIsSubmitting(false);
+    if (!specialty) {
+      setError('Por favor, selecciona una categoría y una especialidad.');
       return;
     }
+    
+    setLoading(true);
 
-    // 2. Creamos el objeto de datos completo
-    const chefData = {
-      name,
-      specialty,
-      experienceYears: experienceNum,
-      email,
-      password,
-    };
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('specialty', specialty); // Se envía el string final
+    formData.append('experienceYears', experienceYears);
+    if (profileImage) {
+      formData.append('profileImage', profileImage);
+    }
 
     try {
-      // 3. Enviamos al endpoint del backend
-      const response = await fetch('http://localhost:5000/api/chefs', {
+      const response = await fetch(`${API_URL}/api/chefs/register`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(chefData),
+        body: formData, 
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        // Capturamos el mensaje de error del backend (ej. email duplicado)
-        const errData = await response.json();
-        throw new Error(errData.message || `Error ${response.status}: No se pudo crear el chef`);
+        throw new Error(data.message || 'Error al crear la cuenta');
       }
 
-      const newChef = await response.json();
-
-      setSuccess(`¡Chef "${newChef.name}" creado! Redirigiendo a la lista...`);
-      
-      // 4. Limpiamos todos los campos
-      setName('');
-      setSpecialty('');
-      setExperienceYears('');
-      setEmail('');
-      setPassword('');
-      
-      // Redirigimos a la lista de chefs
+      setSuccess('¡Chef registrado exitosamente! Redirigiendo al inicio de sesión...');
       setTimeout(() => {
-        navigate('/chefs'); //
-      }, 1500);
+        navigate('/login');
+      }, 2000);
 
     } catch (err) {
-      console.error('Error al crear chef:', err);
       if (err instanceof Error) {
         setError(err.message);
       } else {
         setError('Ocurrió un error desconocido.');
       }
-      setIsSubmitting(false);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="form-container">
-      <h2>Registrar Nuevo Chef</h2>
-      <form onSubmit={handleSubmit}>
-        
-        {/* Campo Nombre */}
-        <div className="form-group">
-          <label htmlFor="name">Nombre del Chef</label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            placeholder="Ej: Gordon Ramsay"
-          />
-        </div>
+    // Quitamos el 'noValidate' para que 'required' funcione mejor
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label htmlFor="name">Nombre de Chef</label>
+        <input
+          type="text"
+          id="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+      </div>
+      
+      <div className="form-group">
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      
+      <div className="form-group">
+        <label htmlFor="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          minLength={6}
+        />
+      </div>
 
-        {/* Campo Especialidad */}
-        <div className="form-group">
-          <label htmlFor="specialty">Especialidad</label>
-          <input
-            type="text"
-            id="specialty"
-            value={specialty}
-            onChange={(e) => setSpecialty(e.target.value)}
-            required
-            placeholder="Ej: Cocina Francesa"
-          />
-        </div>
+      {/* --- ¡¡CAMPO DE ESPECIALIDAD MODIFICADO (AHORA SON 2)!! --- */}
+      <div className="form-group">
+        <label htmlFor="category">Categoría de Especialidad</label>
+        <select
+          id="category"
+          value={selectedCategory}
+          onChange={handleCategoryChange} // <-- Usa la nueva función
+          required
+        >
+          <option value="" disabled>1. Selecciona una categoría...</option>
+          {specialtyCategories.map((category) => (
+            <option key={category.name} value={category.name}>
+              {category.name.replace(/---/g, '')} {/* Quita los "---" */}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        {/* Campo Años de Experiencia */}
-        <div className="form-group">
-          <label htmlFor="experienceYears">Años de Experiencia</label>
-          <input
-            type="number"
-            id="experienceYears"
-            value={experienceYears}
-            onChange={(e) => setExperienceYears(e.target.value)}
-            required
-            min="0"
-            placeholder="Ej: 25"
-          />
-        </div>
-        
-        {/* --- 5. CAMPO DE CORREO --- */}
-        <div className="form-group">
-          <label htmlFor="email">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="Ej: chef@cocina.com"
-          />
-        </div>
+      <div className="form-group">
+        <label htmlFor="specialty">Especialidad Principal</label>
+        <select
+          id="specialty"
+          value={specialty}
+          onChange={(e) => setSpecialty(e.target.value)}
+          required
+          disabled={!selectedCategory} // <-- Deshabilitado hasta que elijan categoría
+        >
+          <option value="" disabled>2. Selecciona una especialidad...</option>
+          {availableSpecialties.map((spec) => (
+            <option key={spec} value={spec}>
+              {spec}
+            </option>
+          ))}
+        </select>
+      </div>
+      {/* --- FIN DEL CAMPO MODIFICADO --- */}
 
-        {/* --- 6. CAMPO DE CONTRASEÑA --- */}
-        <div className="form-group">
-          <label htmlFor="password">Contraseña</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength="6"
-            placeholder="Mínimo 6 caracteres"
-          />
-        </div>
+      <div className="form-group">
+        <label htmlFor="experienceYears">Años de Experiencia</label>
+        <input
+          type="number"
+          id="experienceYears"
+          value={experienceYears}
+          onChange={(e) => setExperienceYears(e.target.value)}
+          required
+          min="0"
+        />
+      </div>
+      
+      <div className="form-group">
+        <label htmlFor="profileImage">Foto de Perfil</label>
+        <input
+          type="file"
+          id="profileImage"
+          onChange={(e) => setProfileImage(e.target.files ? e.target.files[0] : null)}
+          accept="image/png, image/jpeg, image/gif, image/webp"
+        />
+      </div>
 
-        <button type="submit" className="btn-submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Registrando...' : 'Registrar Chef'}
-        </button>
+      <button type="submit" className="btn-submit" disabled={loading}>
+        {loading ? 'Registrando...' : 'Crear Cuenta'}
+      </button>
 
-        {error && <p className="form-message error-message">{error}</p>}
-        {success && <p className="form-message success-message">{success}</p>}
-      </form>
-    </div>
+      {error && <p className="form-message error-message">{error}</p>}
+      {success && <p className="form-message success-message">{success}</p>}
+    </form>
   );
 };
 

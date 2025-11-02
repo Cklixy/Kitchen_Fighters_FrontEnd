@@ -1,24 +1,30 @@
-/* src/pages/AdminPage.tsx */
+/* src/pages/AdminPage.jsx */
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/forms.css'; // Para estilizar los formularios
-import '../css/admin.css'; // Importamos el nuevo CSS de Admin
-
-// --- CSS en línea ELIMINADO ---
+import '../css/forms.css'; 
+import '../css/admin.css'; 
 
 const AdminPage = () => {
+  // Estados de datos
   const [chefs, setChefs] = useState([]);
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // --- ¡¡AÑADIDO!!: Estados de Búsqueda ---
+  const [tournamentSearch, setTournamentSearch] = useState('');
+  const [chefSearch, setChefSearch] = useState('');
+  // --- FIN DE ESTADOS DE BÚSQUEDA ---
+
   // Estados de Creación de Torneo
   const [tournamentName, setTournamentName] = useState('');
   const [startDate, setStartDate] = useState('');
   const [description, setDescription] = useState('');
   const [maxParticipants, setMaxParticipants] = useState('');
+  const [image, setImage] = useState(null); 
+  const [tournamentEstado, setTournamentEstado] = useState('Pendiente'); 
   const [createError, setCreateError] = useState(null);
   const [createSuccess, setCreateSuccess] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,6 +34,7 @@ const AdminPage = () => {
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [editDate, setEditDate] = useState('');
+  const [editEstado, setEditEstado] = useState('Pendiente'); 
   const [editError, setEditError] = useState(null);
   const [isSubmittingEdit, setIsSubmittingEdit] = useState(false);
   
@@ -38,8 +45,10 @@ const AdminPage = () => {
   const [resultsError, setResultsError] = useState(null);
 
   const getToken = () => localStorage.getItem('token');
+  
+  const estadoOptions = ['Pendiente', 'Inscripción', 'En Curso', 'Finalizado', 'Cancelado', 'Aplazado'];
 
-  // Carga inicial de datos
+  // Carga inicial de datos (sin cambios)
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -80,43 +89,53 @@ const AdminPage = () => {
     fetchData();
   }, [navigate]);
 
-  // --- Función para crear torneo ---
+  // --- Lógica de Creación de Torneo (sin cambios) ---
   const handleCreateTournament = async (e) => {
     e.preventDefault();
     setCreateError(null);
     setCreateSuccess(null);
     setIsSubmitting(true);
+    
     try {
       const token = getToken();
       const participantsNum = parseInt(maxParticipants, 10);
       if (isNaN(participantsNum) || participantsNum <= 1) { 
         throw new Error('El número de participantes debe ser un número positivo mayor a 1.');
       }
-      const tournamentData = {
-        name: tournamentName,
-        startDate,
-        description,
-        maxParticipants: participantsNum
-      };
+
+      const formData = new FormData();
+      formData.append('name', tournamentName);
+      formData.append('startDate', startDate);
+      formData.append('description', description);
+      formData.append('maxParticipants', participantsNum);
+      formData.append('estado', tournamentEstado);
+      if (image) {
+        formData.append('image', image); 
+      }
+
       const res = await fetch('http://localhost:5000/api/admin/tournaments', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(tournamentData)
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData 
       });
+
       if (!res.ok) {
         const errData = await res.json();
         throw new Error(errData.message || 'No se pudo crear el torneo');
       }
+
       const newTournament = await res.json();
       setTournaments(prev => [newTournament, ...prev]);
       setCreateSuccess(`¡Torneo "${newTournament.name}" creado!`);
+      
       setTournamentName('');
       setStartDate('');
       setDescription('');
       setMaxParticipants('');
+      setImage(null);
+      setTournamentEstado('Pendiente'); 
+      e.target.reset(); 
+
     } catch (err) {
       setCreateError(err.message);
     } finally {
@@ -124,7 +143,8 @@ const AdminPage = () => {
     }
   };
 
-  // --- Funciones de Gestión ---
+  // --- Resto de funciones (delete, edit, results, chefs... sin cambios) ---
+  
   const handleDeleteTournament = async (id) => {
     if (!window.confirm('¿Estás seguro de que quieres eliminar este torneo?')) {
       return;
@@ -144,12 +164,12 @@ const AdminPage = () => {
     }
   };
 
-  // --- Funciones del Modal de Edición de Torneo ---
   const openEditModal = (tournament) => {
     setEditingTournament(tournament);
     setEditName(tournament.name);
     setEditDescription(tournament.description);
     setEditDate(new Date(tournament.startDate).toISOString().split('T')[0]);
+    setEditEstado(tournament.estado || 'Pendiente'); 
     setEditError(null);
   };
   const closeEditModal = () => setEditingTournament(null);
@@ -162,9 +182,11 @@ const AdminPage = () => {
       const token = getToken();
       const tournamentData = {};
       const originalDate = new Date(editingTournament.startDate).toISOString().split('T')[0];
+      
       if (editName !== editingTournament.name) tournamentData.name = editName;
       if (editDescription !== editingTournament.description) tournamentData.description = editDescription;
       if (editDate !== originalDate) tournamentData.startDate = editDate;
+      if (editEstado !== editingTournament.estado) tournamentData.estado = editEstado; 
 
       if (Object.keys(tournamentData).length === 0) {
         setIsSubmittingEdit(false);
@@ -196,7 +218,6 @@ const AdminPage = () => {
     }
   };
 
-  // --- Funciones del Modal de Resultados ---
   const openResultsModal = (tournament) => {
     setManagingResultsFor(tournament);
     setResultsError(null);
@@ -259,7 +280,6 @@ const AdminPage = () => {
     }
   };
 
-  // --- Funciones de Gestión de Chefs ---
   const handleDeleteChef = async (id, name) => {
     if (!window.confirm(`¿Estás seguro de que quieres eliminar al chef "${name}"? Esta acción no se puede deshacer.`)) {
       return;
@@ -300,8 +320,21 @@ const AdminPage = () => {
       setError(err.message);
     }
   };
+  // --- Fin de funciones sin cambios ---
 
-  // --- Renderizado ---
+
+  // --- ¡¡AÑADIDO!!: Lógica de filtrado para Admin ---
+  const filteredTournaments = tournaments.filter(t =>
+    t.name.toLowerCase().includes(tournamentSearch.toLowerCase())
+  );
+  
+  const filteredChefs = chefs.filter(c =>
+    c.name.toLowerCase().includes(chefSearch.toLowerCase()) ||
+    c.email.toLowerCase().includes(chefSearch.toLowerCase())
+  );
+  // --- FIN DE LÓGICA ---
+
+
   if (loading) return <p className="loading-message">Cargando...</p>;
   if (error) return <p className="error-message">Error: {error}</p>;
 
@@ -314,6 +347,7 @@ const AdminPage = () => {
         <section className="admin-section">
           <h2>Gestionar Torneos</h2>
 
+          {/* Formulario de Creación (sin cambios) */}
           <form onSubmit={handleCreateTournament} className="create-tournament-form">
             <h3 style={{ marginTop: 0 }}>Crear Nuevo Torneo</h3>
             <div className="form-group">
@@ -332,18 +366,53 @@ const AdminPage = () => {
               <label htmlFor="maxParticipants">Participantes Máximos</label>
               <input type="number" id="maxParticipants" value={maxParticipants} onChange={(e) => setMaxParticipants(e.target.value)} required min="2" />
             </div>
+            <div className="form-group">
+              <label htmlFor="tournamentImage">Imagen del Torneo</label>
+              <input 
+                type="file" 
+                id="tournamentImage" 
+                onChange={(e) => setImage(e.target.files[0])} 
+                accept="image/png, image/jpeg, image/gif, image/webp" 
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="tournamentEstado">Estado del Torneo</label>
+              <select 
+                id="tournamentEstado" 
+                value={tournamentEstado} 
+                onChange={(e) => setTournamentEstado(e.target.value)}
+              >
+                {estadoOptions.map(op => (
+                  <option key={op} value={op}>{op}</option>
+                ))}
+              </select>
+            </div>
             <button type="submit" className="btn-submit" disabled={isSubmitting}>
               {isSubmitting ? 'Creando...' : 'Crear Torneo'}
             </button>
             {createError && <p className="form-message error-message">{createError}</p>}
             {createSuccess && <p className="form-message success-message">{createSuccess}</p>}
           </form>
+          {/* --- FIN DE FORMULARIO --- */}
 
-          <h3>Torneos Existentes ({tournaments.length})</h3>
+
+          {/* --- LISTA DE TORNEOS (MODIFICADA) --- */}
+          <h3>Torneos Existentes ({filteredTournaments.length})</h3>
+          
+          {/* ¡¡AÑADIDA BARRA DE BÚSQUEDA!! */}
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Buscar en torneos existentes..."
+            value={tournamentSearch}
+            onChange={(e) => setTournamentSearch(e.target.value)}
+          />
+
           <ul className="admin-list">
-            {tournaments.map(t => (
+            {/* ¡¡MODIFICADO!! Usar lista filtrada */}
+            {filteredTournaments.map(t => ( 
               <li key={t._id} className="admin-list-item">
-                <span>{t.name} ({new Date(t.startDate).toLocaleDateString()})</span>
+                <span>{t.name} ({new Date(t.startDate).toLocaleDateString()}) - <strong>{t.estado}</strong></span>
                 <div className="button-group">
                   <button 
                     className="btn-admin btn-success"
@@ -369,13 +438,29 @@ const AdminPage = () => {
               </li>
             ))}
           </ul>
+          {filteredTournaments.length === 0 && tournaments.length > 0 && (
+             <p style={{color: '#888', textAlign: 'center'}}>No se encontraron torneos con ese nombre.</p>
+          )}
+          {/* --- FIN LISTA DE TORNEOS --- */}
         </section>
 
-        {/* Sección de Gestión de Usuarios */}
+
+        {/* --- SECCIÓN DE USUARIOS (MODIFICADA) --- */}
         <section className="admin-section">
-          <h2>Gestionar Usuarios ({chefs.length})</h2>
+          <h2>Gestionar Usuarios ({filteredChefs.length})</h2>
+          
+          {/* ¡¡AÑADIDA BARRA DE BÚSQUEDA!! */}
+          <input
+            type="text"
+            className="search-bar"
+            placeholder="Buscar usuarios por nombre o email..."
+            value={chefSearch}
+            onChange={(e) => setChefSearch(e.target.value)}
+          />
+
           <ul className="admin-list">
-            {chefs.map(c => {
+             {/* ¡¡MODIFICADO!! Usar lista filtrada */}
+            {filteredChefs.map(c => {
               const chefRole = c.role || 'user';
               return (
                 <li key={c._id} className="admin-list-item">
@@ -394,10 +479,14 @@ const AdminPage = () => {
               );
             })}
           </ul>
+          {filteredChefs.length === 0 && chefs.length > 0 && (
+             <p style={{color: '#888', textAlign: 'center'}}>No se encontraron usuarios con ese nombre o email.</p>
+          )}
+          {/* --- FIN SECCIÓN USUARIOS --- */}
         </section>
       </div>
 
-      {/* --- Modal de Edición de Torneo --- */}
+      {/* --- Modales (MODIFICADOS) --- */}
       {editingTournament && (
         <div className="admin-modal-backdrop" onClick={closeEditModal}>
           <div className="admin-modal-content" onClick={(e) => e.stopPropagation()}>
@@ -416,7 +505,21 @@ const AdminPage = () => {
                 <label htmlFor="editDescription">Descripción</label>
                 <textarea id="editDescription" value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows="3"></textarea>
               </div>
-              <button typeD="submit" className="btn-submit" disabled={isSubmittingEdit}>
+
+              <div className="form-group">
+                <label htmlFor="editEstado">Estado del Torneo</label>
+                <select 
+                  id="editEstado" 
+                  value={editEstado} 
+                  onChange={(e) => setEditEstado(e.target.value)}
+                >
+                  {estadoOptions.map(op => (
+                    <option key={op} value={op}>{op}</option>
+                  ))}
+                </select>
+              </div>
+
+              <button type="submit" className="btn-submit" disabled={isSubmittingEdit}>
                 {isSubmittingEdit ? 'Actualizando...' : 'Actualizar Torneo'}
               </button>
               {editError && <p className="form-message error-message">{editError}</p>}
@@ -425,10 +528,9 @@ const AdminPage = () => {
         </div>
       )}
 
-      {/* --- Modal de Gestión de Resultados --- */}
       {managingResultsFor && (
         <div className="admin-modal-backdrop" onClick={closeResultsModal}>
-          <div className="admin-modal-content" onClick={(e) => e.stopPropagation()}>
+           <div className="admin-modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="admin-modal-close-button" onClick={closeResultsModal}>&times;</button>
             
             <h3>Asignar Puntuaciones: {managingResultsFor.name}</h3>
@@ -467,6 +569,7 @@ const AdminPage = () => {
           </div>
         </div>
       )}
+      {/* --- FIN MODALES --- */}
     </>
   );
 };

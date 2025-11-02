@@ -1,112 +1,145 @@
 /* src/css/forms.css */
 
-/*
-  Contenedor principal para formularios (Login, Register, Profile, etc.)
-  REQUISITO: Minimalista y que concuerde con el diseño
-*/
-.form-container-wrapper {
-  /* Centra el formulario en la página */
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  padding: 4rem 1rem;
-}
-
 .form-container {
-  /* REQUISITO: Efecto "glass" semi-transparente */
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+
+  /* --- ¡¡ESTILO "GLASS" AÑADIDO!! --- */
   background: rgba(30, 30, 30, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px; /* Bordes más redondeados */
+  border-radius: 12px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  color: #f0f0f0;
 }
 
-.form-container h2 {
-  font-size: 2rem;
-  font-weight: 700;
+.form-container h1 {
   text-align: center;
-  margin: 0;
   color: #ffffff;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
 }
 
-/* Grupo de formulario (label + input) */
 .form-group {
-  margin: 0;
+  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
 }
 
 .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #c0c0c0; /* Texto gris claro */
-  font-size: 0.9rem;
+  color: #d0d0d0; /* <-- Color claro */
 }
 
-/* Estilo minimalista para inputs y textareas */
-.form-group input,
-.form-group textarea {
+/* --- ¡¡INPUTS ESTILO "GLASS"!! --- */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1rem;
   font-size: 1rem;
-  border-radius: 8px;
-  box-sizing: border-box;
-  font-family: inherit;
   
-  /* REQUISITO: Estilo "glass" sutil */
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  transition: all 0.2s ease;
+  background-color: rgba(0, 0, 0, 0.3); /* <-- Fondo oscuro */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* <-- Borde claro */
+  border-radius: 8px;
+  color: #ffffff; /* <-- Texto blanco */
+  
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* --- Estilo para el input[type="file"] --- */
+.form-group input[type="file"] {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #d0d0d0;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+}
+
+.form-group input[type="file"]::file-selector-button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 1rem;
+  transition: background-color 0.2s ease;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+  background-color: #777;
+}
+
+
+/* --- Estilos de Focus --- */
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="date"]:focus,
+.form-group input[type="number"]:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* Color del placeholder */
 .form-group input::placeholder,
 .form-group textarea::placeholder {
   color: #888;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #a78bfa; /* Acento violeta al enfocar */
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.5);
-}
-
 .form-group textarea {
-  min-height: 120px;
+  min-height: 100px;
   resize: vertical;
 }
 
-/* Botón de envío principal */
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  padding-right: 2.5rem; /* Espacio para la flecha */
+}
+
+/* Opciones del select en modo oscuro */
+.form-group select option {
+  background-color: #2a2a2a;
+  color: #f0f0f0;
+}
+
+
+/* --- ¡¡BOTÓN "GLASS"!! --- */
 .btn-submit {
   width: 100%;
-  padding: 0.85rem;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
+  padding: 0.85rem 1.5rem;
   border-radius: 8px;
-  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
   transition: all 0.2s ease;
-  
-  /* REQUISITO: Botón primario (estilo de homepage) */
-  background-color: rgba(167, 139, 250, 0.8); /* Violeta */
+  cursor: pointer;
+  border: 1px solid rgba(80, 200, 80, 0.9);
+  background-color: rgba(80, 200, 80, 0.8);
   color: #0d0d0d;
-  border: 1px solid rgba(167, 139, 250, 0.9);
+  margin-top: 1rem;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background-color: rgba(167, 139, 250, 1);
-  color: #0d0d0d;
-  box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
+  background-color: rgba(80, 200, 80, 1);
+  box-shadow: 0 0 15px rgba(80, 200, 80, 0.5);
 }
 
 .btn-submit:disabled {
@@ -116,44 +149,116 @@
   cursor: not-allowed;
 }
 
-/* Enlaces secundarios (ej: "¿Olvidaste tu contraseña?") */
-.form-links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+/* Mensajes de feedback */
+.form-message {
   text-align: center;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-weight: 500;
 }
 
-.form-links a {
-  color: #c0c0c0;
-  font-size: 0.9rem;
+.error-message {
+  background-color: rgba(217, 83, 79, 0.2);
+  border: 1px solid rgba(217, 83, 79, 0.5);
+  color: #ffc0c0;
+}
+
+.success-message {
+  background-color: rgba(92, 184, 92, 0.2);
+  border: 1px solid rgba(92, 184, 92, 0.5);
+  color: #c0ffc0;
+}
+
+.form-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #aaa;
+}
+
+.form-link a {
+  color: #8cb4ff;
   text-decoration: none;
+  font-weight: 600;
 }
 
-.form-links a:hover {
-  color: #ffffff;
+.form-link a:hover {
   text-decoration: underline;
 }
 
-/* Mensajes de feedback (error/success) */
-.form-message {
-  text-align: center;
-  padding: 0.75rem;
-  margin-top: 0; /* Ya hay gap en el .form-container */
+.search-bar {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  
+  background-color: rgba(0, 0, 0, 0.3); /* <-- Fondo oscuro */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* <-- Borde claro */
   border-radius: 8px;
-  font-weight: 500;
-  font-size: 0.9rem;
+  color: #ffffff; /* <-- Texto blanco */
+  
+  box-sizing: border-box; 
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1.5rem; /* <-- Espacio antes de la lista */
 }
 
-.form-message.error-message {
-  color: #ffc0c0;
-  background-color: rgba(255, 80, 80, 0.2);
-  border: 1px solid rgba(255, 80, 80, 0.3);
+.search-bar::placeholder {
+  color: #888; /* <-- Color de placeholder claro */
 }
 
-.form-message.success-message {
-  color: #c0ffc0;
-  background-color: rgba(80, 255, 80, 0.2);
-  border: 1px solid rgba(80, 255, 80, 0.3);
+.search-bar:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  
+  background-color: rgba(0, 0, 0, 0.3); /* <-- Fondo oscuro */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* <-- Borde claro */
+  border-radius: 8px;
+  color: #ffffff; /* <-- Texto blanco */
+  
+  box-sizing: border-box; 
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  margin-bottom: 1.5rem; /* <-- Espacio antes de la lista */
+}
+
+.search-bar::placeholder {
+  color: #888; /* <-- Color de placeholder claro */
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.form-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* Resta la altura del navbar */
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+/* --- Asegúrate de que .form-container tenga este estilo "glass" --- */
+/* (Este estilo ya lo deberías tener de la vez pasada) */
+.form-container {
+  max-width: 500px;
+  width: 100%;
+  margin: 0; /* Quitamos el 'margin: 2rem auto' */
+  padding: 2.5rem;
+
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  color: #f0f0f0;
 }

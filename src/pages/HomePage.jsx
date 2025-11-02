@@ -1,15 +1,10 @@
-/* src/pages/HomePage.jsx */
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-// Importamos el nuevo CSS para el HomePage
 import '../css/homepage.css'; 
 
 function HomePage() {
   return (
     <div className="homepage-wrapper">
-      
-      {/* --- SECCIÓN 1: HERO --- */}
       <section className="home-section hero-section">
         <h2 className="home-hook">¿Eres chef y te gusta competir?</h2>
         <h1 className="home-title">Kitchen Fighters</h1>
@@ -27,7 +22,6 @@ function HomePage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 2: POR QUÉ KITCHEN FIGHTERS (NUEVO CONTENIDO) --- */}
       <section className="home-section">
         <h2 className="section-title">La Cocina es Nuestra Arena</h2>
         <p className="section-subtitle">
@@ -37,12 +31,9 @@ function HomePage() {
         </p>
       </section>
 
-      {/* --- SECCIÓN 3: CARACTERÍSTICAS (CON NUEVO ESTILO DE TARJETA) --- */}
       <section className="home-section">
         <h2 className="section-title">¿Cómo funciona?</h2>
         <div className="features-grid">
-          
-          {/* REQUISITO: Tarjeta con borde de estrella */}
           <div className="star-border-card">
             <span className="feature-icon">👩‍🍳</span>
             <h3>1. Registra Chefs</h3>
@@ -70,11 +61,9 @@ function HomePage() {
         </div>
       </section>
 
-      {/* --- SECCIÓN 4: TESTIMONIO (NUEVO CONTENIDO) --- */}
       <section className="home-section">
-         <h2 className="section-title">Lo que dicen los jueces</h2>
-         {/* Usamos la misma tarjeta para mantener la consistencia */}
-         <div className="testimonial-card star-border-card">
+        <h2 className="section-title">Lo que dicen los jueces</h2>
+        <div className="testimonial-card star-border-card">
             <blockquote>
               "Nunca ha sido tan fácil organizar una competencia. La gestión de puntajes en 
               tiempo real es impecable. Kitchen Fighters ha elevado el nivel de nuestros eventos."
@@ -83,7 +72,6 @@ function HomePage() {
          </div>
       </section>
 
-      {/* --- SECCIÓN 5: LLAMADA A LA ACCIÓN FINAL (CTA) --- */}
       <section className="home-section cta-section">
         <h2>Todo listo para competir.</h2>
         <p className="section-subtitle">Explora los torneos que están activos ahora mismo.</p>
@@ -92,11 +80,9 @@ function HomePage() {
         </Link>
       </section>
 
-      {/* --- FOOTER --- */}
       <footer className="home-footer">
         <p>© 2025 Kitchen Fighters. Todos los derechos reservados.</p>
       </footer>
-      
     </div>
   );
 }

@@ -1,58 +1,42 @@
-/* src/css/navbar.css */
-
 .pill-nav-wrapper {
-    /* Contenedor para centrar el nav */
     display: flex;
     justify-content: center;
     padding: 1.5rem 1rem;
     position: sticky;
-    top: 1.5rem; /* Lo deja "flotando" abajo del borde superior */
+    top: 1.5rem;
     z-index: 1000;
     width: 100%;
   }
   
   .pill-nav {
-    /* Hereda .glass-effect de index.css */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    
-    /* --- CAMBIO: Permitir que los elementos se envuelvan --- */
-    flex-wrap: wrap; 
-    
+    flex-wrap: wrap;
     padding: 0.5rem;
-    border-radius: 9999px; /* Forma de píldora */
+    border-radius: 9999px;
     width: 100%;
-    max-width: 900px; /* Ancho máximo del navbar */
-    
-    /* --- CAMBIO: Añadido para espaciar si se envuelve --- */
-    gap: 0.5rem 1rem; 
+    max-width: 900px;
+    gap: 0.5rem 1rem;
   }
   
-  /* Marca (Kitchen Fighters) */
   .nav-brand {
     font-weight: bold;
     font-size: 1.1rem;
     padding: 0.5rem 1.25rem;
     color: #ffffff;
-    
-    /* --- CAMBIO: margin-right: auto ya no es necesario con flex-wrap --- */
-    /* margin-right: auto; (Eliminado) */
   }
   .nav-brand:hover {
     color: #ffffff;
     text-decoration: none;
   }
   
-  /* Contenedores de enlaces */
   .nav-links {
     display: flex;
     align-items: center;
-    gap: 0.25rem; /* Espacio pequeño entre píldoras */
-    
-    /* --- CAMBIO: Crecerá para llenar el espacio --- */
-    flex-grow: 1; 
-    justify-content: center; /* Centrar los enlaces principales */
+    gap: 0.25rem;
+    flex-grow: 1;
+    justify-content: center;
   }
   
   .nav-auth {
@@ -61,7 +45,6 @@
     gap: 0.25rem;
   }
   
-  /* Estilo de cada "píldora" (Link o button) */
   .nav-item {
     padding: 0.6rem 1rem;
     color: #e0e0e0;
@@ -73,7 +56,7 @@
     border: none;
     cursor: pointer;
     font-family: inherit;
-    white-space: nowrap; /* Evita que "Panel Admin" se rompa */
+    white-space: nowrap;
   }
   
   .nav-item:hover {
@@ -82,7 +65,6 @@
     text-decoration: none;
   }
   
-  /* Botón de Login (más destacado) */
   .button-login {
     background-color: rgba(255, 255, 255, 0.9);
     color: #111;
@@ -92,7 +74,6 @@
     color: #000;
   }
   
-  /* Botón de Salir */
   .button-logout {
     background-color: rgba(255, 80, 80, 0.2);
     color: #ffc0c0;
@@ -102,7 +83,6 @@
     color: #ffffff;
   }
   
-  /* Enlace de Admin */
   .admin-link {
     background-color: rgba(255, 215, 0, 0.1);
     color: #faf08a;
@@ -113,30 +93,27 @@
     color: #fff;
   }
   
-  /* Texto de bienvenida */
   .nav-welcome {
     color: #c0c0c0;
     font-size: 0.9rem;
     padding: 0 0.5rem 0 1rem;
-    display: none; 
+    display: none;
   }
   
-  /* --- Media query simplificada --- */
   @media (min-width: 768px) {
     .nav-welcome {
-      display: inline; /* Mostrar bienvenida en pantallas más grandes */
+      display: inline;
     }
   }
   
   @media (max-width: 640px) {
-    /* En pantallas muy pequeñas, centramos todo */
     .pill-nav {
       justify-content: center;
       border-radius: 20px;
     }
     .nav-links {
       justify-content: center;
-      flex-grow: 0; /* No dejamos que crezca */
+      flex-grow: 0;
     }
     .nav-auth {
       justify-content: center;

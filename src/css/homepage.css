@@ -1,21 +1,14 @@
-/* src/css/homepage.css */
-
-/* --- REQUISITO: Animación de borde de estrella ELIMINADA --- */
-
-/* REQUISITO: Tarjeta de vidrio (reemplaza el estilo de borde de estrella) */
 .star-border-card {
-  /* REQUISITO: Semi-transparente y flotante */
   background: rgba(30, 30, 30, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Para bordes redondeados */
+  overflow: hidden;
   transition: all 0.2s ease;
 }
 
@@ -24,10 +17,7 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   border-color: rgba(255, 255, 255, 0.2);
 }
-/* --- Fin de la tarjeta --- */
 
-
-/* Layout general del Homepage (Sin cambios) */
 .homepage-wrapper {
   display: flex;
   flex-direction: column;
@@ -48,7 +38,6 @@
   gap: 1rem;
 }
 
-/* Sección Hero (Sin cambios) */
 .hero-section {
   gap: 1.5rem;
   padding-top: 4rem;
@@ -80,7 +69,6 @@
   justify-content: center;
 }
 
-/* Títulos de sección (Sin cambios) */
 .section-title {
   font-size: 2.5rem;
   font-weight: 700;
@@ -91,7 +79,6 @@
   max-width: 700px;
 }
 
-/* Grid de Características (Sin cambios) */
 .features-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -108,7 +95,6 @@
   font-size: 2rem;
 }
 
-/* Estilos para el contenido DENTRO de la tarjeta */
 .star-border-card h3 {
   font-size: 1.25rem;
   color: #fff;
@@ -119,7 +105,6 @@
   color: #b0b0b0;
 }
 
-/* Tarjeta de Testimonio (Sin cambios) */
 .testimonial-card {
   max-width: 700px;
 }
@@ -141,7 +126,6 @@
   font-weight: 600;
 }
 
-/* Botones "Glass" (Sin cambios) */
 .glass-button-primary,
 .glass-button-secondary {
   padding: 0.75rem 1.5rem;
@@ -155,6 +139,7 @@
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
 }
+
 .glass-button-primary {
   background-color: rgba(167, 139, 250, 0.8);
   color: #0d0d0d;
@@ -178,7 +163,6 @@
   padding: 0.9rem 2rem;
 }
 
-/* Footer (Sin cambios) */
 .home-footer {
   margin-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);

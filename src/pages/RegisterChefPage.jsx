@@ -1,15 +1,28 @@
 /* src/pages/RegisterChefPage.jsx */
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import CreateChefForm from '../components/CreateChefForm';
-// REQUISITO: Importar el CSS que centra el formulario
-import '../css/forms.css'; 
+import '../css/forms.css';
 
 const RegisterChefPage = () => {
   return (
-    // REQUISITO: Añadir el 'wrapper' para centrar el contenido
-    <div className="form-container-wrapper">
-      <CreateChefForm />
+    // ¡¡ESTRUCTURA MODIFICADA!! (Igual a LoginPage)
+    <div className="form-page-container">
+      <div className="form-container">
+        
+        <h1 style={{ textAlign: 'center' }}>Crear Cuenta</h1>
+        <p style={{ textAlign: 'center', color: '#c0c0c0', marginTop: '-1rem', marginBottom: '1.5rem' }}>
+          Únete a la élite de la cocina.
+        </p>
+
+        <CreateChefForm />
+
+        <p className="form-link" style={{ marginTop: '1.5rem' }}>
+          ¿Ya tienes una cuenta? <Link to="/login">Inicia Sesión</Link>
+        </p>
+
+      </div>
     </div>
   );
 };
