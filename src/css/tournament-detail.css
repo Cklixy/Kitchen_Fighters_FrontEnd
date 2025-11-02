@@ -1,255 +1,205 @@
-/* Guarda esto como src/css/tournament-detail.css */
+/* src/css/tournament-detail.css */
 
 .detail-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-  
-  .detail-header {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2rem;
-  }
-  
-  .detail-header h1 {
-    margin-top: 0;
-    margin-bottom: 0.5rem;
-    color: var(--color-primary);
-  }
-  
-  .detail-info {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    font-size: 1.1rem;
-    color: #555;
-    flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
-  }
-  
-  .detail-info p {
-    margin: 0.25rem 0;
-  }
-  
-  /* Reutilizamos los estilos de status de tournaments.css */
-  .status {
-    padding: 0.25rem 0.75rem;
-    border-radius: 12px;
-    font-weight: bold;
-    text-transform: capitalize;
-    font-size: 1rem;
-    margin-left: 0.5rem;
-  }
-  
-  .status-Pendiente {
-    background-color: #f0ad4e;
-    color: white;
-  }
-  
-  /* Añadimos 'En' y 'Curso' por si acaso */
-  .status-En,
-  .status-Curso,
-  .status-En.Curso {
-    background-color: #5bc0de;
-    color: white;
-  }
-  
-  .status-Finalizado {
-    background-color: #5cb85c;
-    color: white;
-  }
-  
-  /* Layout de dos columnas */
-  .detail-columns {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-  
-  .column-card {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  }
-  
-  .column-card h2 {
-    margin-top: 0;
-    color: var(--color-primary);
-    border-bottom: 2px solid var(--color-primary-light);
-    padding-bottom: 0.5rem;
-  }
-  
-  /* Lista de participantes y ranking */
-  .participant-list,
-  .ranking-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .participant-item,
-  .ranking-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0.5rem;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .participant-item:last-child,
-  .ranking-item:last-child {
-    border-bottom: none;
-  }
-  
-  .participant-info {
-    font-weight: 500;
-    color: #333;
-  }
-  .participant-info span {
-    font-weight: 400;
-    color: #777;
-    font-size: 0.9rem;
-  }
-  
-  .ranking-item .ranking-score {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--color-primary);
-  }
-  
-  .ranking-item .ranking-position {
-    font-weight: bold;
-    color: #888;
-    margin-right: 1rem;
-    min-width: 20px;
-  }
-  
-  /* Mensajes de carga/error */
-  .loading-message,
-  .error-message {
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 2rem;
-    color: #777;
-  }
-  
-  .error-message {
-    color: #D9534F;
-    background-color: #fdd;
-    border: 1px solid #D9534F;
-    border-radius: 4px;
-  }
-  
-  /* Mensaje para listas vacías */
-  .empty-list-message {
-    color: #888;
-    font-style: italic;
-    padding: 1rem 0;
-  }
-  
-  /* Responsive para pantallas pequeñas */
-  @media (max-width: 768px) {
-    .detail-columns {
-      grid-template-columns: 1fr;
-    }
-    .detail-info {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-  }
-
-  /* ... (todos tus estilos anteriores) ... */
-
-/* --- (NUEVO) Estilos para el botón de Inscripción --- */
-.registration-box {
-  background-color: #fcfcfc;
-  border: 1px solid #eee;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin: 0 0 2rem 0; /* Lo ponemos arriba de las columnas */
-  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
+/* REQUISITO: Cabecera "glass" */
+.detail-header {
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  padding: 2rem;
+}
+
+.detail-header h1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+  font-size: 2.5rem;
+}
+
+.detail-info {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  flex-wrap: wrap;
+}
+
+.detail-info p {
+  margin: 0.25rem 0;
+}
+.detail-info strong {
+  color: #e0e0e0;
+}
+
+/* --- REQUISITO: Caja de Inscripción/Descripción "glass" --- */
+.registration-box {
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  padding: 1.5rem;
+  text-align: center;
+}
+.registration-box h3 {
+  color: #fff;
+}
+.registration-box p {
+  color: #c0c0c0;
+}
+
+/* Botón de registrar (verde "glass") */
 .btn-register {
   padding: 0.85rem 1.5rem;
   font-size: 1.1rem;
   font-weight: bold;
-  color: white;
-  background-color: #5cb85c; /* Verde para 'inscribir' */
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.2s ease;
+  
+  background-color: rgba(80, 200, 80, 0.8);
+  color: #0d0d0d;
+  border: 1px solid rgba(80, 200, 80, 0.9);
 }
 
 .btn-register:hover:not(:disabled) {
-  background-color: #4a9d4a;
+  background-color: rgba(80, 200, 80, 1);
+  box-shadow: 0 0 15px rgba(80, 200, 80, 0.5);
 }
 
 .btn-register:disabled {
-  background-color: #ccc;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #888;
+  border-color: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
 }
 
-/* (NUEVO) Mensaje de éxito/error para la inscripción */
+/* Mensajes de feedback */
 .registration-box .success-message {
-  color: #5cb85c;
+  color: #c0ffc0;
   font-weight: bold;
   margin: 0;
 }
-
 .registration-box .error-message {
-  color: #D9534F;
+  color: #ffc0c0;
   font-weight: bold;
   margin-top: 1rem;
 }
 
-/* AÑADE ESTO AL FINAL de src/css/tournament-detail.css */
 
-/* --- Estilos para el botón de Inscripción --- */
-.registration-box {
-    background-color: #fcfcfc;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin: 0 0 2rem 0; /* Lo ponemos arriba de las columnas */
-    text-align: center;
-  }
+/* --- REQUISITO: Columnas de tarjetas "glass" --- */
+.detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.column-card {
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   
-  .btn-register {
-    padding: 0.85rem 1.5rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: white;
-    background-color: #5cb85c; /* Verde para 'inscribir' */
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+  padding: 1.5rem;
+}
+
+.column-card h2 {
+  margin-top: 0;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+/* Lista de participantes y ranking */
+.participant-list,
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.participant-item,
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.participant-item:last-child,
+.ranking-item:last-child {
+  border-bottom: none;
+}
+
+.participant-info {
+  font-weight: 500;
+  color: #e0e0e0;
+}
+.participant-info span {
+  font-weight: 400;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.ranking-item .ranking-score {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #c4b5fd; /* Acento violeta */
+}
+
+.ranking-item .ranking-position {
+  font-weight: bold;
+  color: #888;
+  margin-right: 1rem;
+  min-width: 20px;
+}
+
+/* Mensajes */
+.loading-message,
+.error-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem;
+  color: #c0c0c0;
+}
+.error-message {
+  color: #ffc0c0;
+  background-color: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
+}
+.empty-list-message {
+  color: #888;
+  font-style: italic;
+  padding: 1rem 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detail-columns {
+    grid-template-columns: 1fr;
   }
-  
-  .btn-register:hover:not(:disabled) {
-    background-color: #4a9d4a;
+  .detail-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
-  
-  .btn-register:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  /* Mensaje de éxito/error para la inscripción */
-  .registration-box .success-message {
-    color: #5cb85c;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .registration-box .error-message {
-    color: #D9534F;
-    font-weight: bold;
-    margin-top: 1rem;
-  }
+}

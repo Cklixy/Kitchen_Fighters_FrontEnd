@@ -1,233 +1,192 @@
 /* src/css/homepage.css */
 
-/* --- Estructura General --- */
+/* --- REQUISITO: Animación de borde de estrella ELIMINADA --- */
+
+/* REQUISITO: Tarjeta de vidrio (reemplaza el estilo de borde de estrella) */
+.star-border-card {
+  /* REQUISITO: Semi-transparente y flotante */
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Para bordes redondeados */
+  transition: all 0.2s ease;
+}
+
+.star-border-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+/* --- Fin de la tarjeta --- */
+
+
+/* Layout general del Homepage (Sin cambios) */
 .homepage-wrapper {
-  width: 100%;
-  overflow-x: hidden; /* Evita scroll horizontal */
-}
-
-.home-container,
-.features-section,
-.cta-section {
-  padding: 4rem 2rem;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-/* --- SECCIÓN 1: EL GANCHO (HERO) --- */
-.hero-section {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 85vh; /* Un poco menos para que se vea que hay más contenido */
-  background-color: #fcfcfc; /* Un fondo muy sutil */
-}
-
-/* El gancho que propusiste */
-.home-hook {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-primary); /* ¡Rojo para llamar la atención! */
-  margin-bottom: 1rem;
-}
-
-.home-header h1 {
-  font-size: 3.8rem;
-  font-weight: 700;
-  color: var(--color-text);
-  margin-bottom: 1.5rem;
-  position: relative;
-  display: inline-block;
-}
-
-.home-header h1::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  background-color: var(--color-primary);
-  border-radius: 2px;
-}
-
-.home-description {
-  font-size: 1.25rem;
-  color: #555;
-  max-width: 600px;
-  margin: 2.5rem 0;
-  line-height: 1.7;
-  font-weight: 400;
-}
-
-.home-cta-buttons {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-}
-
-/* --- SECCIÓN 2: CARACTERÍSTICAS --- */
-.features-section {
-  background-color: var(--color-background); /* Fondo blanco */
-  padding-top: 5rem;
-  padding-bottom: 5rem;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 4rem;
-  position: relative;
-}
-
-.section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background-color: var(--color-neutral);
-}
-
-.features-grid {
-  display: grid;
-  /* 4 columnas en escritorio, se adapta en móvil */
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  max-width: 1100px;
+  gap: 4rem;
+  padding: 2rem 1rem 4rem 1rem;
+  width: 100%;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
-.feature-card {
-  padding: 2rem;
-  border: 1px solid var(--color-neutral);
-  border-radius: 8px;
-  background-color: #fff;
-  transition: all 0.2s ease-in-out;
-}
-
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.feature-icon {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 1.5rem;
-}
-
-.feature-card h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 0.75rem;
-}
-
-.feature-card p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-}
-
-/* --- SECCIÓN 3: CTA FINAL --- */
-.cta-section {
-  background-color: #f8f8f8; /* Gris muy claro */
-  padding: 5rem 2rem;
-  border-top: 1px solid var(--color-neutral);
-}
-
-.cta-section h2 {
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-.cta-section p {
-  font-size: 1.15rem;
-  color: #555;
-  margin-bottom: 2rem;
-}
-
-.btn-large {
-  font-size: 1.1rem;
-  padding: 1rem 2rem;
-}
-
-/* --- FOOTER --- */
-.home-footer {
+.home-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  padding: 2rem;
+  gap: 1rem;
+}
+
+/* Sección Hero (Sin cambios) */
+.hero-section {
+  gap: 1.5rem;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+}
+.home-hook {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #c4b5fd;
+}
+.home-title {
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -2px;
+  background: linear-gradient(120deg, #fff, #c0c0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.home-description {
+  font-size: 1.25rem;
+  color: #c0c0c0;
+  max-width: 600px;
+}
+.home-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Títulos de sección (Sin cambios) */
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  max-width: 700px;
+}
+
+/* Grid de Características (Sin cambios) */
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.feature-icon {
+  font-size: 2rem;
+}
+
+/* Estilos para el contenido DENTRO de la tarjeta */
+.star-border-card h3 {
+  font-size: 1.25rem;
+  color: #fff;
+  margin: 0.5rem 0;
+}
+.star-border-card p {
+  font-size: 0.95rem;
+  color: #b0b0b0;
+}
+
+/* Tarjeta de Testimonio (Sin cambios) */
+.testimonial-card {
+  max-width: 700px;
+}
+.testimonial-card blockquote {
+  font-size: 1.2rem;
+  font-style: italic;
+  color: #e0e0e0;
+  border-left: 3px solid #a78bfa;
+  padding-left: 1rem;
+  text-align: left;
+}
+.testimonial-card cite {
+  display: block;
+  margin-top: 1rem;
   font-size: 0.9rem;
-  color: #aaa;
-  background-color: var(--color-text);
+  color: #a78bfa;
+  text-align: right;
+  font-style: normal;
+  font-weight: 600;
 }
 
-.home-footer p {
-  margin: 0;
-  color: #888; /* Texto gris para el footer oscuro */
-}
-
-/* --- BOTONES (Reutilizables) --- */
-.btn {
-  display: inline-block;
-  padding: 0.85rem 1.75rem;
+/* Botones "Glass" (Sin cambios) */
+.glass-button-primary,
+.glass-button-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
-  border-radius: 8px;
-  transition: all 0.2s ease-in-out;
-  border: 2px solid transparent;
+  transition: all 0.2s ease;
   cursor: pointer;
-  font-family: var(--font-main); /* Asegura que la fuente sea la correcta */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.glass-button-primary {
+  background-color: rgba(167, 139, 250, 0.8);
+  color: #0d0d0d;
+  border-color: rgba(167, 139, 250, 0.9);
+}
+.glass-button-primary:hover {
+  background-color: rgba(167, 139, 250, 1);
+  color: #0d0d0d;
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
+}
+.glass-button-secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+}
+.glass-button-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+.btn-large {
+  font-size: 1.1rem;
+  padding: 0.9rem 2rem;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
+/* Footer (Sin cambios) */
+.home-footer {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 2rem;
+  width: 100%;
+  text-align: center;
 }
-
-.btn-primary:hover {
-  background-color: #b0271e;
-  border-color: #b0271e;
-  transform: scale(1.05);
-}
-
-.btn-secondary {
-  background-color: transparent;
-  color: var(--color-text);
-  border-color: var(--color-neutral);
-}
-
-.btn-secondary:hover {
-  background-color: #f5f5f5;
-  border-color: #aaa;
-  transform: scale(1.05);
-}
-
-/* --- RESPONSIVE --- */
-@media (max-width: 768px) {
-  .home-header h1 {
-    font-size: 2.8rem; /* Título más pequeño en móvil */
-  }
-
-  .home-hook {
-    font-size: 1.1rem;
-  }
-
-  .home-description {
-    font-size: 1.1rem;
-  }
-
-  .home-cta-buttons {
-    flex-direction: column;
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-  }
+.home-footer p {
+  color: #888;
+  font-size: 0.9rem;
 }

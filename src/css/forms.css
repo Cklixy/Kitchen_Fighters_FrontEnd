@@ -1,86 +1,159 @@
-/* Guarda esto como src/css/forms.css */
+/* src/css/forms.css */
+
+/*
+  Contenedor principal para formularios (Login, Register, Profile, etc.)
+  REQUISITO: Minimalista y que concuerde con el diseño
+*/
+.form-container-wrapper {
+  /* Centra el formulario en la página */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 4rem 1rem;
+}
 
 .form-container {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    max-width: 500px;
-    margin: 2rem auto; /* Centra el formulario */
-  }
+  /* REQUISITO: Efecto "glass" semi-transparente */
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px; /* Bordes más redondeados */
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   
-  .form-container h2 {
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: var(--color-primary);
-  }
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-container h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Grupo de formulario (label + input) */
+.form-group {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #c0c0c0; /* Texto gris claro */
+  font-size: 0.9rem;
+}
+
+/* Estilo minimalista para inputs y textareas */
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-family: inherit;
   
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
+  /* REQUISITO: Estilo "glass" sutil */
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transition: all 0.2s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #888;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #a78bfa; /* Acento violeta al enfocar */
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0 2px rgba(167, 139, 250, 0.5);
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Botón de envío principal */
+.btn-submit {
+  width: 100%;
+  padding: 0.85rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
   
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #555;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
-  }
-  
-  .form-group input:focus {
-    border-color: var(--color-primary);
-    outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-light);
-  }
-  
-  .btn-submit {
-    width: 100%;
-    padding: 0.85rem;
-    font-size: 1rem;
-    font-weight: bold;
-    color: white;
-    background-color: var(--color-primary);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .btn-submit:hover:not(:disabled) {
-    background-color: var(--color-primary-dark);
-  }
-  
-  .btn-submit:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  /* Mensajes de feedback */
-  .form-message {
-    text-align: center;
-    padding: 0.75rem;
-    margin-top: 1rem;
-    border-radius: 4px;
-    font-weight: 500;
-  }
-  
-  .form-message.error-message {
-    color: #D9534F;
-    background-color: #fdd;
-    border: 1px solid #D9534F;
-  }
-  
-  .form-message.success-message {
-    color: #5cb85c;
-    background-color: #eaf7ea;
-    border: 1px solid #5cb85c;
-  }
+  /* REQUISITO: Botón primario (estilo de homepage) */
+  background-color: rgba(167, 139, 250, 0.8); /* Violeta */
+  color: #0d0d0d;
+  border: 1px solid rgba(167, 139, 250, 0.9);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: rgba(167, 139, 250, 1);
+  color: #0d0d0d;
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.5);
+}
+
+.btn-submit:disabled {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #888;
+  border-color: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+}
+
+/* Enlaces secundarios (ej: "¿Olvidaste tu contraseña?") */
+.form-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.form-links a {
+  color: #c0c0c0;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.form-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Mensajes de feedback (error/success) */
+.form-message {
+  text-align: center;
+  padding: 0.75rem;
+  margin-top: 0; /* Ya hay gap en el .form-container */
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.form-message.error-message {
+  color: #ffc0c0;
+  background-color: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+}
+
+.form-message.success-message {
+  color: #c0ffc0;
+  background-color: rgba(80, 255, 80, 0.2);
+  border: 1px solid rgba(80, 255, 80, 0.3);
+}

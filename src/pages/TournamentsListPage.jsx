@@ -1,11 +1,13 @@
+/* src/pages/TournamentsListPage.jsx */
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import '../css/tournaments.css'; //
+import '../css/tournaments.css';
+// homepage.css ya no es necesario aquí
+// import '../css/homepage.css'; 
 
-/**
- * Página para mostrar la lista de todos los torneos.
- */
 const TournamentsPage = () => {
+  // ... (toda la lógica de fetch se mantiene igual) ...
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -13,12 +15,11 @@ const TournamentsPage = () => {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
+        setLoading(true);
         const response = await fetch('http://localhost:5000/api/tournaments');
-        
         if (!response.ok) {
           throw new Error(`Error ${response.status}: No se pudo obtener la lista de torneos`);
         }
-        
         const data = await response.json();
         setTournaments(data);
       } catch (err) {
@@ -32,15 +33,15 @@ const TournamentsPage = () => {
         setLoading(false);
       }
     };
-
     fetchTournaments();
   }, []);
+
 
   const renderContent = () => {
     if (loading) {
       return <p className="loading-message">Cargando torneos...</p>;
     }
-
+    // ... (lógica de error y vacío se mantiene igual) ...
     if (error) {
       return <p className="error-message">Error al cargar torneos: {error}</p>;
     }
@@ -48,7 +49,7 @@ const TournamentsPage = () => {
     if (tournaments.length === 0) {
       return (
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>No hay torneos disponibles en este momento.</p>
+          <p>No hay torneos disponibles en este momento.</p>
         </div>
       );
     }
@@ -56,20 +57,14 @@ const TournamentsPage = () => {
     return (
       <div className="tournaments-list">
         {tournaments
-          // --- ¡¡ESTA ES LA LÍNEA CORREGIDA!! ---
-          // Filtramos cualquier torneo que no tenga un ID antes de intentar mostrarlo
           .filter(tournament => tournament && tournament._id) 
-          // --- FIN DE LA CORRECCIÓN ---
           .map((tournament) => {
-          
-            // Mantenemos el arreglo para la fecha
             const displayDate = tournament.inicio || tournament.startDate;
 
             return (
+              // --- REQUISITO: Clase de tarjeta cambiada ---
               <div key={tournament._id} className="tournament-card">
                 <h2>{tournament.name}</h2>
-                
-                {/* --- SECCIÓN DE ESTADO ELIMINADA --- */}
                 
                 <p>
                   <strong>Inicio:</strong> 
@@ -78,7 +73,7 @@ const TournamentsPage = () => {
                 
                 <p>
                   <strong>Participantes:</strong> 
-                  {tournament.participants?.length || 0} / 16
+                  {tournament.participants?.length || 0} / {tournament.maxParticipants || 16}
                 </p>
 
                 <Link to={`/tournaments/${tournament._id}`} className="details-link">

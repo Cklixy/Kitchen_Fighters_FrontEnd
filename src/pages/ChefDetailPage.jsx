@@ -1,24 +1,24 @@
+/* src/pages/ChefDetailPage.tsx */
+
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import '../css/chef-detail.css'; // Importamos el CSS nuevo
+// Importamos homepage para el estilo del botón
+import '../css/homepage.css'; 
 
 const API_URL = 'http://localhost:5000';
 const defaultProfilePic = 'https://cdn-icons-png.flaticon.com/512/1053/1053244.png';
 
 const ChefDetailPage = () => {
-  // 1. Obtenemos el ID de la URL (gracias a la ruta /chefs/:id)
   const { id } = useParams();
-
   const [chef, setChef] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 2. useEffect para cargar los datos del chef específico
   useEffect(() => {
     const fetchChef = async () => {
       try {
         setLoading(true);
-        // Usamos el endpoint GET /api/chefs/:id que ya existe en el backend
         const response = await fetch(`${API_URL}/api/chefs/${id}`);
         
         if (!response.ok) {
@@ -41,9 +41,8 @@ const ChefDetailPage = () => {
     };
 
     fetchChef();
-  }, [id]); // Se ejecuta cada vez que el 'id' cambie
+  }, [id]);
 
-  // 3. Renderizado principal
   if (loading) {
     return <p className="loading-message">Cargando perfil del chef...</p>;
   }
@@ -56,16 +55,24 @@ const ChefDetailPage = () => {
     return <p>Chef no encontrado.</p>;
   }
 
-  // 4. Construimos la URL de la imagen
   const imageUrl = chef.profileImageUrl 
     ? `${API_URL}/${chef.profileImageUrl}` 
     : defaultProfilePic;
 
   return (
-    <div>
-      <Link to="/chefs" className="back-link">
+    // Contenedor principal de la página
+    <div className="chef-detail-wrapper">
+      
+      {/* Botón "Volver" con estilo "glass" */}
+      <Link 
+        to="/chefs" 
+        className="glass-button-secondary" 
+        style={{ alignSelf: 'flex-start' }}
+      >
         &larr; Volver a todos los chefs
       </Link>
+      
+      {/* Tarjeta "glass" para el contenido */}
       <div className="chef-detail-container">
         <header className="chef-detail-header">
           <img 
@@ -77,15 +84,21 @@ const ChefDetailPage = () => {
           <h1>{chef.name}</h1>
           <p>{chef.specialty}</p>
         </header>
+        
         <main className="chef-detail-body">
-          <h2>Biografía</h2>
-          <p className="bio">
-            {chef.description || 'Este chef aún no ha añadido una biografía.'}
-          </p>
-          <h2>Experiencia</h2>
-          <p style={{ fontSize: '1.1rem' }}>
-            {chef.experienceYears} años en la industria culinaria.
-          </p>
+          <section>
+            <h2>Biografía</h2>
+            <p className="bio">
+              {chef.description || 'Este chef aún no ha añadido una biografía.'}
+            </p>
+          </section>
+          
+          <section>
+            <h2>Experiencia</h2>
+            <p>
+              {chef.experienceYears} años en la industria culinaria.
+            </p>
+          </section>
         </main>
       </div>
     </div>

@@ -1,16 +1,16 @@
+/* src/pages/ChefsPage.jsx */
+
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
-import '../css/chefs.css'; 
+import '../css/chefs.css';
+// homepage.css ya no es necesario aquí
+// import '../css/homepage.css'; 
 
-// URL base del backend
 const API_URL = 'http://localhost:5000';
-// Imagen de perfil por defecto
 const defaultProfilePic = 'https://cdn-icons-png.flaticon.com/512/1053/1053244.png';
 
-/**
- * Página para mostrar la lista de chefs (estilo tarjetas).
- */
 const ChefsPage = () => {
+  // ... (toda la lógica de fetch se mantiene igual) ...
   const [chefs, setChefs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,12 +18,10 @@ const ChefsPage = () => {
   const fetchChefs = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_URL}/api/chefs`); //
-      
+      const response = await fetch(`${API_URL}/api/chefs`); 
       if (!response.ok) {
         throw new Error(`Error ${response.status}: No se pudo obtener la lista de chefs`);
       }
-      
       const data = await response.json();
       setChefs(data);
     } catch (err) {
@@ -46,7 +44,7 @@ const ChefsPage = () => {
     if (loading) {
       return <p className="loading-message">Cargando chefs...</p>;
     }
-
+    // ... (lógica de error y vacío se mantiene igual) ...
     if (error) {
       return <p className="error-message">Error al cargar chefs: {error}</p>;
     }
@@ -54,7 +52,7 @@ const ChefsPage = () => {
     if (chefs.length === 0) {
       return (
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <p style={{ fontSize: '1.1rem', color: '#666' }}>No hay chefs registrados todavía.</p>
+          <p>No hay chefs registrados todavía.</p>
         </div>
       );
     }
@@ -68,6 +66,7 @@ const ChefsPage = () => {
             : defaultProfilePic;
 
           return (
+            // --- REQUISITO: Clase de tarjeta cambiada ---
             <div key={chef._id} className="chef-card">
               
               <img 
@@ -99,7 +98,6 @@ const ChefsPage = () => {
 
   return (
     <div className="chefs-page-container">
-      {/* --- BOTÓN ELIMINADO DE ESTA SECCIÓN --- */}
       <div className="page-header">
         <h1>Conoce a los Chefs</h1>
       </div>

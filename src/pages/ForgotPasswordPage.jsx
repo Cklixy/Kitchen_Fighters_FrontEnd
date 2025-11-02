@@ -1,3 +1,5 @@
+/* src/pages/ForgotPasswordPage.jsx */
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../css/forms.css'; // Reutilizamos el CSS de formularios
@@ -29,9 +31,8 @@ const ForgotPasswordPage = () => {
         throw new Error(data.message || 'Error al enviar el correo');
       }
 
-      // Siempre mostramos un mensaje genérico por seguridad
       setMessage(data.message);
-      setEmail(''); // Limpiar el campo
+      setEmail('');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -40,36 +41,39 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="form-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Recuperar Contraseña</h2>
-        <p style={{ color: '#666', textAlign: 'center', marginBottom: '1.5rem' }}>
-          Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
-        </p>
+    // REQUISITO: Añadir el 'wrapper' para centrar
+    <div className="form-container-wrapper">
+      <div className="form-container">
+        <form onSubmit={handleSubmit} style={{display: 'contents'}}>
+          <h2>Recuperar Contraseña</h2>
+          <p style={{ color: '#c0c0c0', textAlign: 'center', marginTop: '-1rem' }}>
+            Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.
+          </p>
 
-        <div className="form-group">
-          <label htmlFor="email">Correo Electrónico</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            placeholder="tu@correo.com"
-          />
+          <div className="form-group">
+            <label htmlFor="email">Correo Electrónico</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="tu@correo.com"
+            />
+          </div>
+
+          <button type="submit" className="btn-submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Enviando...' : 'Enviar Enlace'}
+          </button>
+
+          {message && <p className="form-message success-message">{message}</p>}
+          {error && <p className="form-message error-message">{error}</p>}
+        </form>
+
+        <div className="form-links">
+          <Link to="/login">¿Recordaste tu contraseña? Inicia Sesión</Link>
         </div>
-
-        <button type="submit" className="btn-submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Enviando...' : 'Enviar Enlace'}
-        </button>
-
-        {message && <p className="form-message success-message">{message}</p>}
-        {error && <p className="form-message error-message">{error}</p>}
-
-        <p className="form-switch">
-          ¿Recordaste tu contraseña? <Link to="/login">Inicia Sesión</Link>
-        </p>
-      </form>
+      </div>
     </div>
   );
 };

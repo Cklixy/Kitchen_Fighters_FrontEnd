@@ -1,89 +1,100 @@
-/* Guarda esto como src/css/chef-detail.css */
+/* src/css/chef-detail.css */
 
+/* Contenedor principal de la página */
+.chef-detail-wrapper {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* REQUISITO: Contenedor "glass" */
 .chef-detail-container {
-    max-width: 900px;
-    margin: 2rem auto;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
-    overflow: hidden; /* Para contener la imagen */
-  }
-  
-  .chef-detail-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2.5rem 2rem;
-    background-color: var(--color-primary-light);
-    border-bottom: 3px solid var(--color-primary);
-  }
-  
-  .chef-detail-img {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 5px solid white;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1rem;
-    background-color: #f0f0f0;
-  }
-  
-  .chef-detail-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-    color: var(--color-primary-dark);
-  }
-  
-  .chef-detail-header p {
-    margin: 0.25rem 0 0 0;
-    font-size: 1.2rem;
-    color: var(--color-primary-dark);
-    font-weight: 500;
-  }
-  
-  .chef-detail-body {
-    padding: 2rem 2.5rem;
-  }
-  
-  .chef-detail-body h2 {
-    color: var(--color-primary);
-    border-bottom: 2px solid var(--color-primary-light);
-    padding-bottom: 0.5rem;
-    margin-top: 0;
-  }
-  
-  .chef-detail-body .bio {
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: #444;
-    white-space: pre-wrap; /* Respeta los saltos de línea de la descripción */
-  }
-  
-  .back-link {
-    display: inline-block;
-    margin: 1.5rem 0 0 2.5rem;
-    color: var(--color-primary);
-    text-decoration: none;
-    font-weight: 600;
-  }
-  
-  .back-link:hover {
-    text-decoration: underline;
-  }
-  
-  /* Mensajes de carga/error */
-  .loading-message,
-  .error-message {
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 2rem;
-    color: #777;
-  }
-  
-  .error-message {
-    color: #D9534F;
-    background-color: #fdd;
-    border: 1px solid #D9534F;
-    border-radius: 4px;
-  }
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.chef-detail-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 2rem;
+  /* Fondo de acento sutil */
+  background: rgba(167, 139, 250, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chef-detail-img {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #a78bfa; /* Borde de acento */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.chef-detail-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #ffffff;
+}
+
+.chef-detail-header p {
+  margin: 0.25rem 0 0 0;
+  font-size: 1.2rem;
+  color: #c4b5fd; /* Color acento */
+  font-weight: 500;
+}
+
+.chef-detail-body {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.chef-detail-body h2 {
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.5rem;
+  margin: 0;
+}
+
+.chef-detail-body .bio {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #c0c0c0;
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+.chef-detail-body p {
+  font-size: 1.1rem;
+  color: #c0c0c0;
+  margin: 0;
+}
+
+/* Mensajes de carga/error */
+.loading-message,
+.error-message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem;
+  color: #c0c0c0;
+}
+
+.error-message {
+  color: #ffc0c0;
+  background-color: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
+}

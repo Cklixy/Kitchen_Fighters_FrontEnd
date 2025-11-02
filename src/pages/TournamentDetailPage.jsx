@@ -1,25 +1,24 @@
+/* src/pages/TournamentDetailPage.tsx */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import '../css/tournament-detail.css';
-import '../css/tournaments.css'; // Para el botón
+import '../css/tournament-detail.css'; // CSS principal
+// import '../css/tournaments.css'; // ELIMINADO
 
 const API_URL = 'http://localhost:5000';
 
 const TournamentDetailPage = () => {
   const { id } = useParams();
 
-  // Estados del torneo
   const [tournament, setTournament] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 1. Nuevos estados para el login y el registro
   const [loggedInChef, setLoggedInChef] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registerError, setRegisterError] = useState(null);
   const [registerSuccess, setRegisterSuccess] = useState(null);
 
-  // 2. Extraemos la función de fetch para poder reutilizarla
   const fetchTournament = useCallback(async () => {
     try {
       setLoading(true);
@@ -43,12 +42,9 @@ const TournamentDetailPage = () => {
     }
   }, [id]);
 
-  // 3. useEffect para cargar datos del torneo y del chef logueado
   useEffect(() => {
-    // Carga los datos del torneo
     fetchTournament();
 
-    // Revisa si hay un chef logueado en localStorage
     const storedChef = localStorage.getItem('chef');
     if (storedChef && storedChef !== 'undefined') {
       try {
@@ -58,9 +54,8 @@ const TournamentDetailPage = () => {
         localStorage.removeItem('chef');
       }
     }
-  }, [fetchTournament]); // Se ejecuta una vez al montar
+  }, [fetchTournament]);
 
-  // 4. Nueva función para manejar la inscripción
   const handleRegister = async () => {
     setIsSubmitting(true);
     setRegisterError(null);
@@ -74,7 +69,6 @@ const TournamentDetailPage = () => {
     }
 
     try {
-      // 5. Llamamos al endpoint protegido
       const response = await fetch(`${API_URL}/api/tournaments/${id}/register`, {
         method: 'POST',
         headers: {
@@ -88,9 +82,8 @@ const TournamentDetailPage = () => {
         throw new Error(data.message || 'Error al inscribirse');
       }
 
-      // 6. Éxito: Mostramos mensaje y actualizamos el torneo
       setRegisterSuccess('¡Inscrito exitosamente!');
-      setTournament(data); // Actualizamos el estado con el torneo que devuelve el backend
+      setTournament(data); 
 
     } catch (err) {
       if (err instanceof Error) {
@@ -104,7 +97,6 @@ const TournamentDetailPage = () => {
   };
 
 
-  // 7. Lógica de renderizado
   if (loading) {
     return <p className="loading-message">Cargando detalles del torneo...</p>;
   }
@@ -123,13 +115,11 @@ const TournamentDetailPage = () => {
   
   const displayDate = tournament.inicio || tournament.startDate;
 
-  // 8. Verificamos si el chef logueado ya está inscrito
   const isAlreadyRegistered = loggedInChef && tournament.participants.some(
     p => p._id === loggedInChef._id
   );
 
-  // 9. Lógica de participantes máximos
-  const maxP = tournament.maxParticipants || 16; // Default a 16 si no está definido
+  const maxP = tournament.maxParticipants || 16;
   const participantsCount = tournament.participants?.length || 0;
   const isFull = participantsCount >= maxP;
 
@@ -146,46 +136,37 @@ const TournamentDetailPage = () => {
           </p>
           <p>
             <strong>Inscritos:</strong>
-            {/* --- ¡¡MODIFICADO!! Usa maxParticipants --- */}
             {participantsCount} / {maxP}
           </p>
         </div>
       </header>
       
-      {/* --- ¡¡BLOQUE DE DESCRIPCIÓN AÑADIDO!! --- */}
-      {/* Mostramos la descripción si existe y no es el default */}
+      {/* --- BLOQUE DE DESCRIPCIÓN --- */}
       {tournament.description && tournament.description !== 'No hay descripción para este torneo.' && (
-        <div className="registration-box description-box" style={{textAlign: 'left', background: '#fdfdfd'}}>
+        <div className="registration-box description-box" style={{textAlign: 'left'}}>
           <h3 style={{marginTop: 0, marginBottom: '0.5rem'}}>Descripción del Torneo</h3>
-          {/* Añadimos whiteSpace: 'pre-wrap' para respetar saltos de línea */}
           <p style={{marginTop: 0, whiteSpace: 'pre-wrap'}}>
             {tournament.description}
           </p>
         </div>
       )}
-      {/* --- FIN DEL BLOQUE AÑADIDO --- */}
 
       {/* --- BLOQUE DE INSCRIPCIÓN --- */}
       {loggedInChef && (
         <div className="registration-box">
           {(() => {
-            // Caso 1: El torneo ya no está 'Pendiente'
             if (tournament.estado !== 'Pendiente') {
               return <p className="success-message">Las inscripciones para este torneo están cerradas.</p>;
             }
-            // Caso 1.5: El torneo está lleno (y no estás inscrito)
             if (isFull && !isAlreadyRegistered) {
               return <p className="success-message">Este torneo ya ha alcanzado el máximo de {maxP} participantes.</p>;
             }
-            // Caso 2: Ya está inscrito
             if (isAlreadyRegistered) {
               return <p className="success-message">¡Ya estás inscrito en este torneo!</p>;
             }
-            // Caso 3: Inscripción exitosa (oculta el botón)
             if (registerSuccess) {
               return <p className="success-message">{registerSuccess}</p>;
             }
-            // Caso 4: Botón para inscribirse
             return (
               <>
                 <button 
@@ -195,16 +176,14 @@ const TournamentDetailPage = () => {
                 >
                   {isSubmitting ? 'Inscribiendo...' : '¡Inscribirme a este torneo!'}
                 </button>
-                {registerError && <p className="error-message">{registerError}</p>}
+                {registerError && <p className="error-message" style={{marginTop: '1rem'}}>{registerError}</p>}
               </>
             );
           })()}
         </div>
       )}
-      {/* --- FIN DEL BLOQUE DE INSCRIPCIÓN --- */}
 
-
-      {/* --- COLUMNAS (Sin cambios) --- */}
+      {/* --- COLUMNAS --- */}
       <div className="detail-columns">
         <div className="column-card">
           <h2>Participantes ({participantsCount})</h2>

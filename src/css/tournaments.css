@@ -1,14 +1,22 @@
+/* src/css/tournaments.css */
+
 .tournaments-page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centra el contenido */
+  gap: 2rem;
 }
 
+/* REQUISITO: Título minimalista */
 .tournaments-page-container h1 {
-  color: var(--color-primary);
-  margin-bottom: 2rem;
-  border-bottom: 2px solid var(--color-primary-light);
-  padding-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
 }
 
 /* Grid para la lista de torneos */
@@ -16,43 +24,51 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
-/* Estilo para cada tarjeta de torneo */
+/* REQUISITO: Tarjeta de vidrio */
+/* Esta clase se usa en TournamentsListPage.jsx */
 .tournament-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
 .tournament-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .tournament-card h2 {
   margin-top: 0;
   margin-bottom: 1rem;
-  color: var(--color-primary);
+  color: #ffffff;
   font-size: 1.5rem;
 }
 
 .tournament-card p {
   margin: 0.5rem 0;
-  color: #555;
+  color: #c0c0c0;
   line-height: 1.6;
 }
 
 .tournament-card p strong {
-  color: #333;
+  color: #e0e0e0;
   margin-right: 0.5rem;
 }
 
-/* --- ESTILOS DE ESTADO (LO QUE FALTABA) --- */
+/* --- ESTILOS DE ESTADO (Mantenidos) --- */
 .status {
   padding: 0.25rem 0.75rem;
   border-radius: 12px;
@@ -63,36 +79,32 @@
   display: inline-block;
   margin-left: 0.25rem;
 }
-
-.status-Pendiente {
-  background-color: #f0ad4e; /* Naranja */
-}
-
-.status-En.Curso,
-.status-En {
-  background-color: #5bc0de; /* Azul */
-}
-
-.status-Finalizado {
-  background-color: #5cb85c; /* Verde */
-}
+.status-Pendiente { background-color: #f0ad4e; }
+.status-En.Curso, .status-En { background-color: #5bc0de; }
+.status-Finalizado { background-color: #5cb85c; }
 /* --- FIN DE ESTILOS DE ESTADO --- */
 
 
+/* REQUISITO: Botón de detalles (estilo "glass" secundario) */
 .details-link {
-  margin-top: auto; /* Empuja el botón al final de la tarjeta */
-  padding: 0.75rem 1rem;
-  background-color: var(--color-primary);
-  color: white;
+  margin-top: 1.5rem; 
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
   text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
   text-align: center;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background-color 0.2s;
 }
 
 .details-link:hover {
-  background-color: var(--color-primary-dark);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  text-decoration: none;
 }
 
 /* Mensajes de carga y error */
@@ -101,12 +113,12 @@
   text-align: center;
   font-size: 1.2rem;
   padding: 2rem;
-  color: #777;
+  color: #c0c0c0;
 }
 
 .error-message {
-  color: #D9534F;
-  background-color: #fdd;
-  border: 1px solid #D9534F;
-  border-radius: 4px;
+  color: #ffc0c0;
+  background-color: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
 }

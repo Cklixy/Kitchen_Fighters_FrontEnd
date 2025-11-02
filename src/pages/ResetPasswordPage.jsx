@@ -1,3 +1,5 @@
+/* src/pages/ResetPasswordPage.jsx */
+
 import React, { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import '../css/forms.css';
@@ -5,7 +7,7 @@ import '../css/forms.css';
 const API_URL = 'http://localhost:5000';
 
 const ResetPasswordPage = () => {
-  const { token } = useParams(); // Obtiene el token de la URL
+  const { token } = useParams();
   const navigate = useNavigate();
 
   const [password, setPassword] = useState('');
@@ -45,7 +47,6 @@ const ResetPasswordPage = () => {
 
       setMessage(data.message);
       
-      // Redirigir a login después de 3 segundos
       setTimeout(() => {
         navigate('/login');
       }, 3000);
@@ -58,55 +59,62 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="form-container">
-      <form onSubmit={handleSubmit} className="auth-form">
-        <h2>Restablecer Contraseña</h2>
-        
-        {!message ? (
-          <>
-            <div className="form-group">
-              <label htmlFor="password">Nueva Contraseña</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength="6"
-                placeholder="Mínimo 6 caracteres"
-              />
-            </div>
+    // REQUISITO: Añadir el 'wrapper' para centrar
+    <div className="form-container-wrapper">
+      <div className="form-container">
+        <form onSubmit={handleSubmit} style={{display: 'contents'}}>
+          <h2>Restablecer Contraseña</h2>
+          
+          {!message ? (
+            <>
+              <div className="form-group">
+                <label htmlFor="password">Nueva Contraseña</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength="6"
+                  placeholder="Mínimo 6 caracteres"
+                />
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-              <input
-                type="password"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                placeholder="Repite la contraseña"
-              />
-            </div>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  placeholder="Repite la contraseña"
+                />
+              </div>
 
-            <button type="submit" className="btn-submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Actualizando...' : 'Actualizar Contraseña'}
-            </button>
-          </>
-        ) : (
-          <>
-            <p className="form-message success-message">
-              {message} Serás redirigido a Iniciar Sesión...
-            </p>
-            <Link to="/login" className="btn-submit" style={{textAlign: 'center', textDecoration: 'none'}}>
-              Ir a Iniciar Sesión
-            </Link>
-          </>
-        )}
+              <button type="submit" className="btn-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Actualizando...' : 'Actualizar Contraseña'}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="form-message success-message">
+                {message} Serás redirigido a Iniciar Sesión...
+              </p>
+              <Link 
+                to="/login" 
+                className="btn-submit" 
+                style={{textAlign: 'center', textDecoration: 'none', lineHeight: '1.5'}}
+              >
+                Ir a Iniciar Sesión
+              </Link>
+            </>
+          )}
 
-        {error && <p className="form-message error-message">{error}</p>}
+          {error && <p className="form-message error-message">{error}</p>}
 
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

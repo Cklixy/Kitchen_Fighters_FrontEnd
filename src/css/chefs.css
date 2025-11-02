@@ -1,40 +1,55 @@
+/* src/css/chefs.css */
+
 .chefs-page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 2rem 1rem 4rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
-/* --- Estilo de Título (Simplificado) --- */
+/* REQUISITO: Título minimalista */
 .page-header h1 {
-  color: var(--color-primary);
-  margin-bottom: 2rem;
-  border-bottom: 2px solid var(--color-primary-light);
-  padding-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
 }
 
-/* --- Grid para la lista de chefs --- */
+/* Grid para la lista de chefs */
 .chefs-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+  width: 100%;
 }
 
-/* --- Tarjeta de Chef --- */
+/* REQUISITO: Tarjeta de vidrio */
+/* Esta clase se usa en ChefsPage.jsx */
 .chef-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: rgba(30, 30, 30, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  
   padding: 1.5rem;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: all 0.2s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  overflow: hidden;
 }
 
 .chef-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .chef-card-img {
@@ -42,46 +57,50 @@
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--color-primary-light);
+  border: 3px solid #a78bfa; /* Borde de acento */
   margin-bottom: 1rem;
-  background-color: #f0f0f0;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .chef-card h3 {
   margin-top: 0;
   margin-bottom: 0.5rem;
-  color: var(--color-primary);
+  color: #ffffff;
   font-size: 1.4rem;
 }
 
 .chef-card p {
   margin: 0.25rem 0;
-  color: #555;
+  color: #c0c0c0;
   font-size: 1rem;
   line-height: 1.5;
 }
 
 .chef-card p strong {
-  color: #333;
+  color: #e0e0e0;
 }
 
-/* --- Botón de detalles --- */
+/* REQUISITO: Botón de detalles (estilo "glass" secundario) */
 .details-link {
-  margin-top: auto; 
+  margin-top: 1.5rem; 
   padding: 0.75rem 1rem;
-  background-color: var(--color-primary);
-  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f0f0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
   text-decoration: none;
   text-align: center;
-  border-radius: 4px;
-  font-weight: bold;
-  transition: background-color 0.2s;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
   width: 100%;
   box-sizing: border-box;
 }
 
 .details-link:hover {
-  background-color: var(--color-primary-dark);
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  text-decoration: none;
 }
 
 /* Mensajes de carga y error */
@@ -90,12 +109,12 @@
   text-align: center;
   font-size: 1.2rem;
   padding: 2rem;
-  color: #777;
+  color: #c0c0c0;
 }
 
 .error-message {
-  color: #D9534F;
-  background-color: #fdd;
-  border: 1px solid #D9534F;
-  border-radius: 4px;
+  color: #ffc0c0;
+  background-color: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.3);
+  border-radius: 8px;
 }
