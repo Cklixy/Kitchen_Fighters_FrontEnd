@@ -36,25 +36,25 @@ function HomePage() {
         <div className="features-grid">
           <div className="star-border-card">
             <span className="feature-icon">👩‍🍳</span>
-            <h3>1. Registra Chefs</h3>
+            <h3>Registra Chefs</h3>
             <p>Crea perfiles para todos tus chefs, con su especialidad y años de experiencia.</p>
           </div>
           
           <div className="star-border-card">
             <span className="feature-icon">🏆</span>
-            <h3>2. Crea Torneos</h3>
+            <h3>Crea Torneos</h3>
             <p>Define tus eventos, ubicaciones y el número máximo de participantes.</p>
           </div>
           
           <div className="star-border-card">
             <span className="feature-icon">💯</span>
-            <h3>3. Sigue la Puntuación</h3>
+            <h3>Sigue la Puntuación</h3>
             <p>Inscribe chefs a los torneos y actualiza sus puntuaciones en vivo (0-100).</p>
           </div>
           
           <div className="star-border-card">
             <span className="feature-icon">📊</span>
-            <h3>4. Ranking en Vivo</h3>
+            <h3>Ranking en Vivo</h3>
             <p>Consulta el ranking final de cualquier torneo, ordenado por el puntaje más alto.</p>
           </div>
           

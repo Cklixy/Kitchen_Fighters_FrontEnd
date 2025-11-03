@@ -28,6 +28,13 @@ const TournamentDetailPage = () => {
   const [showUnregisterConfirmModal, setShowUnregisterConfirmModal] = useState(false);
 
   const fetchTournament = useCallback(async () => {
+    // Verificar que el ID esté definido antes de hacer la petición
+    if (!id || id === 'undefined' || id === 'null') {
+      setError('ID de torneo no válido.');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await fetch(`${API_URL}/api/tournaments/${id}`);
@@ -51,7 +58,14 @@ const TournamentDetailPage = () => {
   }, [id]);
 
   useEffect(() => {
-    fetchTournament();
+    // No hacer la petición si el ID no es válido
+    if (id && id !== 'undefined' && id !== 'null') {
+      fetchTournament();
+    } else if (!id || id === 'undefined' || id === 'null') {
+      // Si el ID no es válido, establecer error y detener loading
+      setError('ID de torneo no válido.');
+      setLoading(false);
+    }
 
     const storedChef = localStorage.getItem('chef');
     if (storedChef && storedChef !== 'undefined') {
@@ -62,11 +76,18 @@ const TournamentDetailPage = () => {
         localStorage.removeItem('chef');
       }
     }
-  }, [fetchTournament]);
+  }, [id, fetchTournament]);
 
   const handleRegister = async () => {
     setIsRegistering(true);
     setSubmissionStatus({ error: null, success: null });
+
+    // Verificar que el ID esté definido antes de hacer la petición
+    if (!id || id === 'undefined' || id === 'null') {
+      setSubmissionStatus({ error: 'ID de torneo no válido.', success: null });
+      setIsRegistering(false);
+      return;
+    }
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -120,6 +141,13 @@ const TournamentDetailPage = () => {
     setIsUnregistering(true);
     setShowUnregisterConfirmModal(false); 
     setSubmissionStatus({ error: null, success: null });
+
+    // Verificar que el ID esté definido antes de hacer la petición
+    if (!id || id === 'undefined' || id === 'null') {
+      setSubmissionStatus({ error: 'ID de torneo no válido.', success: null });
+      setIsUnregistering(false);
+      return;
+    }
 
     const token = localStorage.getItem('token');
     if (!token) {

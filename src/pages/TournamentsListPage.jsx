@@ -105,9 +105,11 @@ const TournamentsPage = () => {
                     {tournament.participants?.length || 0} / {tournament.maxParticipants || 16}
                   </p>
 
-                  <Link to={`/tournaments/${tournament._id}`} className="details-link">
-                    Ver Detalles
-                  </Link>
+                  {tournament._id && (
+                    <Link to={`/tournaments/${tournament._id}`} className="details-link">
+                      Ver Detalles
+                    </Link>
+                  )}
                 </div>
               </div>
             );
